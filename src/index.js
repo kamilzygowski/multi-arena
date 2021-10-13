@@ -1,7 +1,9 @@
+
 let ctx, canvas;
 
 const socket = io('http://localhost:3000');
 socket.on('init', handleInit);
+socket.on('gameState', handleGameState);
 
 function init() {
 canvas = document.getElementById('mainSection');
@@ -37,6 +39,15 @@ console.log(canvas.height);
     drawPlayer();
 }, 1000/60);*/
 
+function paintGame() {
+
+}
+
 function handleInit(msg) {
     console.log(msg);
+}
+
+function handleGameState() {
+    gameState = JSON.parse(gameState);
+    requestAnimationFrame(() => paintGame(gameState))
 }
