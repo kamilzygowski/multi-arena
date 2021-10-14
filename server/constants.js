@@ -1,4 +1,4 @@
-const FRAME_RATE = 10;
+const FRAME_RATE = 120;
 
 
 module.exports = {

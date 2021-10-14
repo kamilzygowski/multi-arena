@@ -1,0 +1,43 @@
+html {
+    background: #130f40;
+    color:#fff;
+}
+
+#mainSection {
+    display: none;
+    width:1420px;
+    height: 760px;
+    margin: auto auto;
+}
+
+#initialScreen {
+   
+}
+
+#newGameButton {
+    margin:0 auto;
+    height: 85px;
+    width:280px;
+    margin-left: 42%;
+}
+
+#gameCodeInput {
+    width:290px;
+    height: 25px;
+    margin-left: 41%;
+    margin-block: 65px;
+}
+
+#joinGameButton {
+    height: 85px;
+    width:230px;
+    margin-left: 43%;
+}
+
+.header {
+    margin-left: 45.5%;
+}
+
+.header2 {
+    margin-left: 43%;
+}
