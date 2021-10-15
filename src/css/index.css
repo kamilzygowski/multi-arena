@@ -1,5 +1,8 @@
 html {
-    background: #130f40;
+    background: url("https://i.postimg.cc/zXMhTY6y/x.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
     color:#fff;
 }
 
@@ -19,25 +22,52 @@ html {
     height: 85px;
     width:280px;
     margin-left: 42%;
+    background: url("https://i.postimg.cc/3xGdQ4RB/button.png");
+    background-size: cover;
+    background-position: center;
+    border-radius: 28px;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+#newGameButton:hover{
+    opacity: 0.5;
 }
 
 #gameCodeInput {
     width:290px;
-    height: 25px;
+    height: 35px;
     margin-left: 41%;
     margin-block: 65px;
+    border-radius: 10px;
+    border: 1px solid #000;
+    font-size: 30px;
 }
 
 #joinGameButton {
     height: 85px;
     width:230px;
     margin-left: 43%;
+    background: url("https://i.postimg.cc/3xGdQ4RB/button.png");
+    background-size: cover;
+    background-position: center;
+    border-radius: 28px;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+#joinGameButton:hover {
+    opacity: 0.5;;
 }
 
 .header {
-    margin-left: 45.5%;
+    margin-left: 42.5%;
+    font-size: 56px;
 }
 
 .header2 {
     margin-left: 43%;
+    background-color: #000;
+    width: 380px;
+    padding:auto;
 }

@@ -61,7 +61,6 @@ gameActive = true;
 
 function keydown(e){
     socket.emit('keydown', e.keyCode);
-    console.log(e);
 }
 
 function keyup(e){
