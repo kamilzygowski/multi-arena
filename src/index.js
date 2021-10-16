@@ -3,6 +3,8 @@ const playerImg = new Image;
 playerImg.src = './images/player.png';
 const playerImg2 = new Image;
 playerImg2.src = './images/player2.png';
+const canvasBackground = new Image;
+canvasBackground.src = './images/testCanvasBackground.png';
 
 const socket = io('http://localhost:3000');
 
@@ -49,14 +51,12 @@ ctx = canvas.getContext('2d');
 canvas.width = 1420;
 canvas.height = 760;
 
-ctx.fillStyle = 'grey';
-ctx.fillRect(0, 0, canvas.width, canvas.height);
+/*ctx.fillStyle = 'grey';
+ctx.drawImage(canvasBackground, 0, 0, canvas.width, canvas.height);*/
 
 document.addEventListener('keydown', keydown);
 document.addEventListener('keyup', keyup);
 gameActive = true;
-
-
 }
 
 function keydown(e){
