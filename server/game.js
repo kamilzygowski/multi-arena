@@ -1,4 +1,4 @@
-const {gameHeight, gameWidth, playerSpeed} = require('./constants');
+const {gameHeight, gameWidth, playerSpeed,firstSkill,manaRegen, hpRegen} = require('./constants');
 
 let canIMove = true;
 
@@ -6,6 +6,8 @@ module.exports = {
     gameLoop,
     getUpdatedVelocity,
     initGame,
+    getUpdatedHp,
+    imageFlip,
 }
 
 function initGame() {
@@ -20,7 +22,6 @@ function collision(object1, object2, colliderObject) {
     var distance = Math.sqrt(dx * dx + dy * dy);
     if (distance < object1.radius + object2.radius) {
         if (colliderObject === 'playersCollision'){
-            console.log(object1);
             
         }
     }
@@ -31,6 +32,8 @@ function createGameState() {
 return {
     players: [{
         id:0,
+        hp:100,
+        mana:200,
         pos: {
             x: 620,
             y: 460
@@ -40,8 +43,11 @@ return {
             y:0
         },
         radius: 30,
+        img:'./images/player.png',
     }, {
         id:1,
+        hp:100,
+        mana:200,
         pos: {
             x: 1110,
             y: 460
@@ -51,6 +57,7 @@ return {
             y:0
         },
         radius: 30,
+        img:'./images/player2.png',
     }
     ],
     healingPotion: {},
@@ -107,18 +114,38 @@ function gameLoop(state) {
     } else if (playerTwo.pos.y <= 0 &&  playerTwo.vel.y >0){
         playerTwo.pos.y += playerTwo.vel.y;
     }
-}
-    /*
+}    /*
     * The end of player not going out!
     */ 
 
-    /*if(playerTwo.pos.x < 0 || playerTwo.pos.y < 0){
+    /**
+     * if one of the players dies, end the game and choose winner
+     */
+    if(playerOne.hp <= 0){
         return 2;
     }
 
-    if(playerTwo.pos.x < 0 || playerTwo.pos.y < 0){
+    if(playerTwo.hp <= 0){
         return 1;
-    }*/
+    }
+
+
+    /**
+     * If mana and hp is not full regenerate it during the time
+     */
+    if(playerOne.mana < 200){
+    playerOne.mana += manaRegen;
+    }
+    if(playerTwo.mana < 200){
+    playerTwo.mana += manaRegen;
+    }
+
+    if(playerOne.hp < 100){
+        playerOne.hp += hpRegen;
+        }
+        if(playerTwo.hp < 100){
+        playerTwo.hp += hpRegen;
+        }
 
     return false;
 }
@@ -163,14 +190,33 @@ function getUpdatedVelocity(keyCode, state){
             return{x:0, y:0};
         }
     }
-    
+}
 
-    /*if(keyCode == 37){
-        return {x: -12, y:0};
+function imageFlip(keyCode, state) {
+    if(keyCode === 65 || keyCode === 37){
+        if(state === 0){
+        return './images/player.png';
+        }
+        if(state === 1){
+            return './images/player2.png';
+        }
     }
-    if (keyCode == 37 && keyCode == 38){
-        return {x: -12, y:-12};
-    }*/
+    if(keyCode === 68 || keyCode === 39){
+        if(state === 0){
+            return './images/playerF.png';
+            }
+            if(state === 1){
+                return './images/player2F.png';
+            }
+    }
+}
+
+
+function getUpdatedHp(keyCode, state) {
+    if (keyCode === 81){
+        //let statusAfter = state - firstSkillDamage;
+        return firstSkill;
+    }
 }
 
 function resetVelocity(keyCode){

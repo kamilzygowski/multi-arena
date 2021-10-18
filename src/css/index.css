@@ -45,7 +45,11 @@ html {
 }
 
 #newGameButton:hover{
-    opacity: 0.5;
+    background: url("../images/button3P1.png");
+    background-size: cover;
+    background-position: center;
+    margin-top: 10px;
+    margin-bottom: -10px;
 }
 
 #gameCodeInput {
@@ -54,7 +58,7 @@ html {
     margin-left: 41%;
     margin-block: 65px;
     border-radius: 10px;
-    border: 8px solid #dcdde1;
+    border: 8px solid #95afc0;
     font-size: 30px;
     font-family: 'abaddon';
     margin-block:45px;
@@ -75,7 +79,11 @@ html {
 }
 
 #joinGameButton:hover {
-    opacity: 0.5;;
+    background: url("../images/button3P3.png");
+    background-size: cover;
+    background-position: center;
+    margin-top: 10px;
+    margin-bottom: -10px;
 }
 
 .header {
@@ -85,8 +93,10 @@ html {
 }
 
 .header2 {
+    margin-top: 25px;
     margin-left: 43%;
     width: 380px;
+    height:40px;
     padding:auto;
 }
 

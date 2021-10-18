@@ -1,13 +1,13 @@
-const playerImg = new Image;
-playerImg.src = './images/player.png';
-const playerImg2 = new Image;
-playerImg2.src = './images/player2.png';
+
 const canvasBackground = new Image;
 canvasBackground.src = './images/cityBackground.png';
 
 let thisFrame=0;
 let frameTime=0;
 let player;
+let thisPlayer;
+let playerImg = new Image;
+let playerImg2 = new Image;
 
 const socket = io('http://localhost:3000');
 
@@ -56,9 +56,6 @@ ctx = canvas.getContext('2d');
 canvas.width = 1420;
 canvas.height = 760;
 
-/*ctx.fillStyle = 'grey';
-ctx.drawImage(canvasBackground, 0, 0, canvas.width, canvas.height);*/
-
 document.addEventListener('keydown', keydown);
 document.addEventListener('keyup', keyup);
 gameActive = true;
@@ -66,18 +63,27 @@ gameActive = true;
 
 function keydown(e){
     socket.emit('keydown', e.keyCode);
-    if (e.keyCode === 37 || e.keyCode === 65){
-        if(e.target.id == 0){
+    /**
+     * Players flip their image if they are moving towards direction
+     */
+    /*if (e.keyCode === 37 || e.keyCode === 65){
+        if(playerNumber == 1){
             playerImg.src = './images/player.png';
-        }else if(e.target.id == 1){
+        }else if(playerNumber == 2){
             playerImg2.src = './images/player2.png';
         }
     } else if (e.keyCode === 39 || e.keyCode === 68){
-        if(e.target.id == 0){
+        if(playerNumber == 1){
             playerImg.src = './images/playerF.png';
-        } else if(e.target.id == 1){
+        } else if(playerNumber == 2){
             playerImg2.src = './images/player2F.png';
         }
+    }*/
+    /**
+     * Attack when spacebar is pressed
+     */
+    if (e.keyCode === 32){
+        console.log(thisPlayer);
     }
 
 }
@@ -102,9 +108,12 @@ function paintGame(state) {
     ctx.beginPath();
     ctx.arc(state.players[1].pos.x + 30, state.players[1].pos.y + 30, state.players[1].radius, 0 ,2*Math.PI);
     ctx.stroke();*/
+    playerImg.src = state.players[0].img;
+    playerImg2.src = state.players[1].img;
     drawPlayer(state.players[0], playerImg);
     drawPlayer(state.players[1],playerImg2);
     //ctx.rotate(45 * Math.PI/180); Funny effect
+    showCharacterStatus(state);
 }
 
 function drawPlayer(playerState, playerImage){
@@ -114,11 +123,16 @@ function drawPlayer(playerState, playerImage){
     frameTime = frameTime % 15;
     thisFrame = Math.round(frameTime / 15);
     ctx.drawImage(playerImage, 128 *thisFrame, 0, 128, 96, player.pos.x, player.pos.y, 128, 96);
-    
+}
 
-    /*ctx.fillStyle = 'red';
-    ctx.fillRect(player.pos.x,player.pos.y, 70, 70);*/
-    //console.log(player);
+function showCharacterStatus(state) {
+    ctx.font = '600 36px abaddon';
+    ctx.fillStyle = "#ff3f34";
+    ctx.fillText('Health: ' + Math.floor(state.players[playerNumber-1].hp) , 1210, 30);
+    ctx.fillStyle = "#0fbcf9";
+    ctx.fillText('Mana: ' + Math.floor(state.players[playerNumber-1].mana) , 1210, 65);
+
+    thisPlayer = state.players[playerNumber-1];
 }
 
 function handleInit(number) {
