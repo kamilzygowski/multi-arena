@@ -1,10 +1,17 @@
+@font-face {
+    font-family: 'abaddon';
+    src:url('../vendor/Abaddon_Fonts_v1.2/Abaddon\ Bold.ttf') format('truetype');
+}
+
 html {
     /*background: url("https://i.postimg.cc/zXMhTY6y/x.jpg");*/
-    background: url('https://i.postimg.cc/rFDHsS9r/pexels-johannes-plenio-1165982.jpg');
+    /*background: url('https://i.postimg.cc/rFDHsS9r/pexels-johannes-plenio-1165982.jpg');*/
+    background: url('https://i.postimg.cc/7LyGjjL1/pexels-frank-cone-2961876.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: top;
     color:#fff;
+    font-family: 'abaddon';
 }
 
 #mainSection {
@@ -15,6 +22,7 @@ html {
     border: 3px solid #fff;
     background:url('../images/waitingScreen.gif');
     background-size: cover;
+    background-position: top;
 }
 
 #initialScreen {
@@ -23,15 +31,17 @@ html {
 
 #newGameButton {
     margin:0 auto;
-    height: 85px;
+    height: 125px;
     width:280px;
     margin-left: 42%;
-    background: url("https://i.postimg.cc/3xGdQ4RB/button.png");
+    background: url("../images/button3.png");
     background-size: cover;
     background-position: center;
-    border-radius: 28px;
-    font-size: 36px;
+    border: none;
+    font-size: 38px;
     font-weight: 700;
+    font-family: 'abaddon';
+    color:#fff;
 }
 
 #newGameButton:hover{
@@ -40,24 +50,28 @@ html {
 
 #gameCodeInput {
     width:290px;
-    height: 35px;
+    height: 45px;
     margin-left: 41%;
     margin-block: 65px;
     border-radius: 10px;
-    border: 1px solid #000;
+    border: 8px solid #dcdde1;
     font-size: 30px;
+    font-family: 'abaddon';
+    margin-block:45px;
 }
 
 #joinGameButton {
-    height: 85px;
+    height: 105px;
     width:230px;
     margin-left: 43%;
-    background: url("https://i.postimg.cc/3xGdQ4RB/button.png");
+    background: url("../images/button1.png");
     background-size: cover;
     background-position: center;
-    border-radius: 28px;
-    font-size: 36px;
+    border:none;
+    font-size: 46px;
     font-weight: 700;
+    font-family: 'abaddon';
+    color:#fff;
 }
 
 #joinGameButton:hover {
@@ -65,12 +79,56 @@ html {
 }
 
 .header {
-    margin-left: 42.5%;
-    font-size: 56px;
+    margin-left: 38.8%;
+    font-size: 84px;
+    color: linear-gradient(to left, violet, indigo, green, blue, yellow, orange, red);
 }
 
 .header2 {
     margin-left: 43%;
     width: 380px;
     padding:auto;
+}
+
+.or{
+    text-align: center;
+    font-size: 66px;
+    margin-top:50px;
+    margin-bottom: 0;
+}
+
+.m{
+    color:#81ecec;
+}
+
+.u{
+    color:#74b9ff;
+}
+
+.l{
+    color:#a29bfe;
+}
+
+.t{
+    color:#fab1a0;
+}
+
+.i{
+    color:#ffeaa7;
+}
+
+.a{
+    color:#55efc4;
+}
+
+.r{
+    color:#fd79a8;
+}
+
+.e{
+    color:#ff5e57;
+}
+
+.n{
+    color:#0fbcf9;
 }

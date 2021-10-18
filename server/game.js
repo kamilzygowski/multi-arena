@@ -30,6 +30,7 @@ function createGameState() {
     
 return {
     players: [{
+        id:0,
         pos: {
             x: 620,
             y: 460
@@ -40,6 +41,7 @@ return {
         },
         radius: 30,
     }, {
+        id:1,
         pos: {
             x: 1110,
             y: 460

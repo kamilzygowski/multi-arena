@@ -3,10 +3,11 @@ playerImg.src = './images/player.png';
 const playerImg2 = new Image;
 playerImg2.src = './images/player2.png';
 const canvasBackground = new Image;
-canvasBackground.src = './images/testCanvasBackground.png';
+canvasBackground.src = './images/cityBackground.png';
 
 let thisFrame=0;
 let frameTime=0;
+let player;
 
 const socket = io('http://localhost:3000');
 
@@ -65,7 +66,19 @@ gameActive = true;
 
 function keydown(e){
     socket.emit('keydown', e.keyCode);
-
+    if (e.keyCode === 37 || e.keyCode === 65){
+        if(e.target.id == 0){
+            playerImg.src = './images/player.png';
+        }else if(e.target.id == 1){
+            playerImg2.src = './images/player2.png';
+        }
+    } else if (e.keyCode === 39 || e.keyCode === 68){
+        if(e.target.id == 0){
+            playerImg.src = './images/playerF.png';
+        } else if(e.target.id == 1){
+            playerImg2.src = './images/player2F.png';
+        }
+    }
 
 }
 
@@ -78,7 +91,7 @@ function paintGame(state) {
     ctx.fillRect(20,150, 650,650);
 
     ctx.fillStyle = 'grey';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(canvasBackground, 0, 0, canvas.width, canvas.height);
 
     //
     //* Showing up players radius to see if hitboxes are fine
@@ -95,7 +108,7 @@ function paintGame(state) {
 }
 
 function drawPlayer(playerState, playerImage){
-    let player = playerState;
+    player = playerState;
 
     frameTime += 0.15;
     frameTime = frameTime % 15;
