@@ -76,7 +76,7 @@ io.on('connection', client => {
             console.error(e);
             return;
         }
-        const vel = getUpdatedVelocity(keyCode);
+        const vel = getUpdatedVelocity(keyCode,state[roomName].players[client.number - 1].vel);
 
         if (vel) {
             state[roomName].players[client.number - 1].vel = vel;
@@ -95,7 +95,7 @@ io.on('connection', client => {
             console.error(e);
             return;
         }
-        const negateVel =getUpdatedVelocity(0);
+        const negateVel =getUpdatedVelocity(0,state[roomName].players[client.number - 1].vel);
         if (negateVel) {
             state[roomName].players[client.number - 1].vel = negateVel;
         }

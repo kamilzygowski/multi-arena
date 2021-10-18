@@ -13,7 +13,8 @@ html {
     height: 760px;
     margin: auto auto;
     border: 3px solid #fff;
-    /*background:url('../images/testCanvasBackground.png');*/
+    background:url('../images/waitingScreen.gif');
+    background-size: cover;
 }
 
 #initialScreen {
