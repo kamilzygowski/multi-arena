@@ -93,14 +93,6 @@ function keydown(e) {
      * Attack when spacebar is pressed
      */
 
-    if (e.keyCode === 81) {
-        skill1Used = true;
-
-        setTimeout(function () {
-            skill1Used = false;
-        }, 1500);
-    }
-
 }
 
 function keyup(e) {
@@ -122,11 +114,13 @@ function paintGame(state) {
      ctx.stroke();*/
     playerImg.src = state.players[0].img;
     playerImg2.src = state.players[1].img;
-    if (skill1Used == true) {
-        const skill1 = new Image;
-        skill1.src = './images/skill1.png';
-        ctx.drawImage(skill1, state.skill1.x, state.skill1.y, 256, 256);
-    }
+    /**
+     * SKill1 drawing
+     */
+    const skill1 = new Image;
+     skill1.src = './images/skill1.png';
+    ctx.drawImage(skill1, state.skill1.x, state.skill1.y, 256, 256);
+
     drawPlayer(state.players[0], playerImg);
     drawPlayer(state.players[1], playerImg2);
     //ctx.rotate(45 * Math.PI/180); Funny effect

@@ -117,9 +117,19 @@ io.on('connection', client => {
 
         if(skill1 && (client.number - 1 === 1)){
             state[roomName].skill1 = skill1;
+            setTimeout(function () {
+                if(state[roomName] !== null){
+                state[roomName].skill1={};
+                }
+            }, 1500);
         }
         if(skill1 && (client.number - 1 === 0)){
             state[roomName].skill1 = skill1;
+            setTimeout(function () {
+                if(state[roomName] !== null){
+                state[roomName].skill1={};
+                }
+            }, 1500);
         }
     }
 

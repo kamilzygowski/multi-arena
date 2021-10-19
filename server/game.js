@@ -28,6 +28,23 @@ function collision(object1, object2, colliderObject) {
     }
 }
 
+function collision2(object1, object2, colliderObject) {
+    var dx = object1.pos.x - object2.x;
+    var dy = object1.pos.y - object2.y;
+    var distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance < object1.radius + object2.radius) {
+        if (colliderObject === 'playersCollision') {
+
+        }
+        if(colliderObject === 'Skill1Player1'){
+            console.log('player 1 is damageeed!');
+        }
+        if(colliderObject === 'Skill1Player2'){
+            console.log('player 2 is damaged');
+        }
+    }
+}
+
 function createGameState() {
 
     return {
@@ -68,14 +85,22 @@ function createGameState() {
 
 function gameLoop(state) {
     if (!state) {
-        console.log('returned');
+
         return;
     }
 
     const playerOne = state.players[0];
     const playerTwo = state.players[1];
 
+    const skill1 = state.skill1;
+
     collision(playerOne, playerTwo, 'playersCollision');
+    if(playerOne){
+    collision2(playerOne, skill1, 'Skill1Player1');
+    }
+    if(playerTwo){
+    collision2(playerTwo, skill1, 'Skill1Player2');
+    }
 
     /**
      * 
@@ -221,7 +246,7 @@ function getUpdatedHp(keyCode) {
 
 function getUpdatedSkill1(keyCode, state){
     if(keyCode === 81){
-        return { x: state.pos.x-64, y:state.pos.y-64};
+        return { x: state.pos.x-64, y:state.pos.y-64, radius:128};
     }
 }
 
