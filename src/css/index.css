@@ -107,6 +107,30 @@ html {
     margin-bottom: 0;
 }
 
+.exitButton {
+    right:50px;
+    height: 55px;
+    width:115px;
+    background: url('https://i.postimg.cc/J4pHGCX7/button4.png');
+    background-size: cover;
+    background-position: center;
+    border: none;
+    font-size: 38px;
+    font-weight: 700;
+    font-family: 'abaddon';
+    color:#fff;
+    position: absolute;
+    display: none;
+}
+
+.exitButton:hover{
+    background: url('https://i.postimg.cc/vByZ00nS/button4P.png');
+    background-size: cover;
+    background-position: center;
+    margin-top: 5px;
+    margin-bottom: -5px;
+}
+
 .m{
     color:#81ecec;
 }

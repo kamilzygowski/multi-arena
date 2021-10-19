@@ -5,7 +5,7 @@ const io = require('socket.io')({
 });
 
 const { FRAME_RATE } = require('./constants');
-const { gameLoop, getUpdatedVelocity, initGame, getUpdatedHp, imageFlip } = require('./game');
+const { gameLoop, getUpdatedVelocity, initGame, getUpdatedHp, imageFlip, getUpdatedSkill1 } = require('./game');
 const { makeid } = require('./utils');
 
 const state = {};
@@ -77,14 +77,17 @@ io.on('connection', client => {
             return;
         }
 
+        if(state[roomName]!== null){
         /*
          * Set character velocity by a certain value
          */
         const vel = getUpdatedVelocity(keyCode, state[roomName].players[client.number - 1].vel);
 
+
         if (vel) {
             state[roomName].players[client.number - 1].vel = vel;
         }
+    }
 
         /*
          * First skill damage and mana cost config
@@ -108,6 +111,15 @@ io.on('connection', client => {
         }
         if (img && (client.number - 1 === 1)) {
             state[roomName].players[client.number - 1].img = img;
+        }
+
+        const skill1 = getUpdatedSkill1(keyCode, state[roomName].players[client.number - 1]);
+
+        if(skill1 && (client.number - 1 === 1)){
+            state[roomName].skill1 = skill1;
+        }
+        if(skill1 && (client.number - 1 === 0)){
+            state[roomName].skill1 = skill1;
         }
     }
 

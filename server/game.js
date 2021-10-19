@@ -1,4 +1,4 @@
-const {gameHeight, gameWidth, playerSpeed,firstSkill,manaRegen, hpRegen} = require('./constants');
+const { gameHeight, gameWidth, playerSpeed, firstSkill, manaRegen, hpRegen } = require('./constants');
 
 let canIMove = true;
 
@@ -8,6 +8,7 @@ module.exports = {
     initGame,
     getUpdatedHp,
     imageFlip,
+    getUpdatedSkill1,
 }
 
 function initGame() {
@@ -21,55 +22,56 @@ function collision(object1, object2, colliderObject) {
     var dy = object1.pos.y - object2.pos.y;
     var distance = Math.sqrt(dx * dx + dy * dy);
     if (distance < object1.radius + object2.radius) {
-        if (colliderObject === 'playersCollision'){
-            
+        if (colliderObject === 'playersCollision') {
+
         }
     }
 }
 
 function createGameState() {
-    
-return {
-    players: [{
-        id:0,
-        hp:100,
-        mana:200,
-        pos: {
-            x: 620,
-            y: 460
-        },
-        vel: {
-            x:0,
-            y:0
-        },
-        radius: 30,
-        img:'./images/player.png',
-    }, {
-        id:1,
-        hp:100,
-        mana:200,
-        pos: {
-            x: 1110,
-            y: 460
-        },
-        vel: {
-            x:0,
-            y:0
-        },
-        radius: 30,
-        img:'./images/player2.png',
-    }
-    ],
-    healingPotion: {},
-};
+
+    return {
+        players: [{
+            id: 0,
+            hp: 100,
+            mana: 200,
+            pos: {
+                x: 620,
+                y: 460
+            },
+            vel: {
+                x: 0,
+                y: 0
+            },
+            radius: 30,
+            img: './images/player.png',
+        }, {
+            id: 1,
+            hp: 100,
+            mana: 200,
+            pos: {
+                x: 1110,
+                y: 460
+            },
+            vel: {
+                x: 0,
+                y: 0
+            },
+            radius: 30,
+            img: './images/player2.png',
+        }
+        ],
+        healingPotion: {},
+        skill1: {},
+    };
 }
 
 function gameLoop(state) {
-    if (!state){
+    if (!state) {
         console.log('returned');
         return;
     }
-    
+
     const playerOne = state.players[0];
     const playerTwo = state.players[1];
 
@@ -80,52 +82,48 @@ function gameLoop(state) {
      This block is controling where is the edge of the screen and makes player not corssing those edges
      *
      **/
-    if (canIMove){
-    if (playerOne.pos.x < gameWidth && playerOne.pos.x >0)
-    {
-    playerOne.pos.x += playerOne.vel.x;
-    } else if (playerOne.pos.x >= gameWidth && playerOne.vel.x <0){
-        playerOne.pos.x += playerOne.vel.x;
-    } else if (playerOne.pos.x <= 0 &&  playerOne.vel.x >0){
-        playerOne.pos.x += playerOne.vel.x;
-    }
-    if (playerOne.pos.y < gameHeight && playerOne.pos.y >0)
-    {
-    playerOne.pos.y += playerOne.vel.y;
-    } else if (playerOne.pos.y >= gameHeight && playerOne.vel.y <0){
-        playerOne.pos.y += playerOne.vel.y;
-    } else if (playerOne.pos.y <= 0 &&  playerOne.vel.y >0){
-        playerOne.pos.y += playerOne.vel.y;
-    }
+    if (canIMove) {
+        if (playerOne.pos.x < gameWidth && playerOne.pos.x > 0) {
+            playerOne.pos.x += playerOne.vel.x;
+        } else if (playerOne.pos.x >= gameWidth && playerOne.vel.x < 0) {
+            playerOne.pos.x += playerOne.vel.x;
+        } else if (playerOne.pos.x <= 0 && playerOne.vel.x > 0) {
+            playerOne.pos.x += playerOne.vel.x;
+        }
+        if (playerOne.pos.y < gameHeight && playerOne.pos.y > 0) {
+            playerOne.pos.y += playerOne.vel.y;
+        } else if (playerOne.pos.y >= gameHeight && playerOne.vel.y < 0) {
+            playerOne.pos.y += playerOne.vel.y;
+        } else if (playerOne.pos.y <= 0 && playerOne.vel.y > 0) {
+            playerOne.pos.y += playerOne.vel.y;
+        }
 
-    if (playerTwo.pos.x < gameWidth && playerTwo.pos.x >0)
-    {
-    playerTwo.pos.x += playerTwo.vel.x;
-    } else if (playerTwo.pos.x >= gameWidth && playerTwo.vel.x <0){
-        playerTwo.pos.x += playerTwo.vel.x;
-    } else if (playerTwo.pos.x <= 0 &&  playerTwo.vel.x >0){
-        playerTwo.pos.x += playerTwo.vel.x;
-    }
-    if (playerTwo.pos.y < gameHeight && playerTwo.pos.y >0)
-    {
-    playerTwo.pos.y += playerTwo.vel.y;
-    } else if (playerTwo.pos.y >= gameHeight && playerTwo.vel.y <0){
-        playerTwo.pos.y += playerTwo.vel.y;
-    } else if (playerTwo.pos.y <= 0 &&  playerTwo.vel.y >0){
-        playerTwo.pos.y += playerTwo.vel.y;
-    }
-}    /*
+        if (playerTwo.pos.x < gameWidth && playerTwo.pos.x > 0) {
+            playerTwo.pos.x += playerTwo.vel.x;
+        } else if (playerTwo.pos.x >= gameWidth && playerTwo.vel.x < 0) {
+            playerTwo.pos.x += playerTwo.vel.x;
+        } else if (playerTwo.pos.x <= 0 && playerTwo.vel.x > 0) {
+            playerTwo.pos.x += playerTwo.vel.x;
+        }
+        if (playerTwo.pos.y < gameHeight && playerTwo.pos.y > 0) {
+            playerTwo.pos.y += playerTwo.vel.y;
+        } else if (playerTwo.pos.y >= gameHeight && playerTwo.vel.y < 0) {
+            playerTwo.pos.y += playerTwo.vel.y;
+        } else if (playerTwo.pos.y <= 0 && playerTwo.vel.y > 0) {
+            playerTwo.pos.y += playerTwo.vel.y;
+        }
+    }    /*
     * The end of player not going out!
-    */ 
+    */
 
     /**
      * if one of the players dies, end the game and choose winner
      */
-    if(playerOne.hp <= 0){
+    if (playerOne.hp <= 0) {
         return 2;
     }
 
-    if(playerTwo.hp <= 0){
+    if (playerTwo.hp <= 0) {
         return 1;
     }
 
@@ -133,19 +131,19 @@ function gameLoop(state) {
     /**
      * If mana and hp is not full regenerate it during the time
      */
-    if(playerOne.mana < 200){
-    playerOne.mana += manaRegen;
+    if (playerOne.mana < 200) {
+        playerOne.mana += manaRegen;
     }
-    if(playerTwo.mana < 200){
-    playerTwo.mana += manaRegen;
+    if (playerTwo.mana < 200) {
+        playerTwo.mana += manaRegen;
     }
 
-    if(playerOne.hp < 100){
+    if (playerOne.hp < 100) {
         playerOne.hp += hpRegen;
-        }
-        if(playerTwo.hp < 100){
+    }
+    if (playerTwo.hp < 100) {
         playerTwo.hp += hpRegen;
-        }
+    }
 
     return false;
 }
@@ -159,66 +157,74 @@ function healingPotions(state) {
     state.healingPotion = healingPotion;
 }
 
-function getUpdatedVelocity(keyCode, state){
-    
+function getUpdatedVelocity(keyCode, state) {
+
+    if(state !== null){
     switch (keyCode) {
         case 37: {// left
-            return {x: -playerSpeed, y:state.y};
+            return { x: -playerSpeed, y: state.y };
         }
         case 38: {// down
-            return {x:state.x, y:-playerSpeed};
+            return { x: state.x, y: -playerSpeed };
         }
         case 39: {// right
-            return {x: playerSpeed, y:state.y};
+            return { x: playerSpeed, y: state.y };
         }
         case 40: {// up
-            return {x:state.x, y:playerSpeed};
+            return { x: state.x, y: playerSpeed };
         }
         case 65: {// left
-            return {x: -playerSpeed, y:state.y};
+            return { x: -playerSpeed, y: state.y };
         }
         case 87: {// down
-            return {x:state.x, y:-playerSpeed};
+            return { x: state.x, y: -playerSpeed };
         }
         case 68: {// right
-            return {x: playerSpeed, y:state.y};
+            return { x: playerSpeed, y: state.y };
         }
         case 83: {// up
-            return {x:state.x, y:playerSpeed};
+            return { x: state.x, y: playerSpeed };
         }
-        case 0:{
-            return{x:0, y:0};
+        case 0: {
+            return { x: 0, y: 0 };
         }
+    }
     }
 }
 
 function imageFlip(keyCode, state) {
-    if(keyCode === 65 || keyCode === 37){
-        if(state === 0){
-        return './images/player.png';
+    if (keyCode === 65 || keyCode === 37) {
+        if (state === 0) {
+            return './images/player.png';
         }
-        if(state === 1){
+        if (state === 1) {
             return './images/player2.png';
         }
     }
-    if(keyCode === 68 || keyCode === 39){
-        if(state === 0){
+    if (keyCode === 68 || keyCode === 39) {
+        if (state === 0) {
             return './images/playerF.png';
-            }
-            if(state === 1){
-                return './images/player2F.png';
-            }
+        }
+        if (state === 1) {
+            return './images/player2F.png';
+        }
     }
 }
 
 
-function getUpdatedHp(keyCode, state) {
-    if (keyCode === 81){
-        //let statusAfter = state - firstSkillDamage;
+function getUpdatedHp(keyCode) {
+    if (keyCode === 81) { // Skill 1
+
         return firstSkill;
     }
 }
 
-function resetVelocity(keyCode){
+function getUpdatedSkill1(keyCode, state){
+    if(keyCode === 81){
+        return { x: state.pos.x-64, y:state.pos.y-64};
+    }
+}
+
+function resetVelocity(keyCode) {
 
 }
