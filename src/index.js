@@ -4,11 +4,14 @@ canvasBackground.src = './images/cityBackground.png';
 
 let thisFrame = 0;
 let frameTime = 0;
+let thisFrame2 = 0;
+let frameTime2 = 0;
 let player;
 let thisPlayer;
 let playerImg = new Image;
 let playerImg2 = new Image;
 let skill1Used = false;
+
 
 const socket = io('http://localhost:3000');
 
@@ -73,6 +76,29 @@ function init() {
 
 function keydown(e) {
     socket.emit('keydown', e.keyCode);
+
+    /*
+     * When skill 1 is pressed, start counting to go on to next frames
+     */
+    if(e.keyCode === 81){
+        setTimeout(() => {
+            thisFrame2 = 0;
+        }, 70);
+        setTimeout(() => {
+            thisFrame2 = 1;
+        }, 140);
+        setTimeout(() => {
+            thisFrame2 = 2;
+        }, 210);
+        setTimeout(() => {
+            thisFrame2 = 3;
+        }, 280);
+        setTimeout(() => {
+            thisFrame2 = 3;
+        }, 350);
+    }
+    thisFrame2 = -1;
+    return;
 }
 
 function keyup(e) {
@@ -99,7 +125,8 @@ function paintGame(state) {
      */
     const skill1 = new Image;
      skill1.src = './images/skill1.png';
-    ctx.drawImage(skill1, state.skill1.x, state.skill1.y, 256, 256);
+    //ctx.drawImage(skill1, state.skill1.x, state.skill1.y, 256, 256);
+    drawSkill1(state.skill1, skill1);
 
     drawPlayer(state.players[0], playerImg);
     drawPlayer(state.players[1], playerImg2);
@@ -114,6 +141,11 @@ function drawPlayer(playerState, playerImage) {
     frameTime = frameTime % 15;
     thisFrame = Math.round(frameTime / 15);
     ctx.drawImage(playerImage, 128 * thisFrame, 0, 128, 96, player.pos.x, player.pos.y, 128, 96);
+}
+
+function drawSkill1(position, image){
+
+    ctx.drawImage(image, 256 * thisFrame2, 0, 256, 256, position.x, position.y, 256, 256);
 }
 
 function showCharacterStatus(state) {

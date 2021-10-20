@@ -101,7 +101,7 @@ io.on('connection', client => {
                     state[roomName].players[0].hp -= hp.damage;
                     state[roomName].players[1].mana -= hp.mana;
                     player1TakingDamage(false);
-                } else if(hp&& (client.number -1 === 1) && state[roomName].players[1].mana >= firstSkill.mana) {
+                } else if (hp && (client.number - 1 === 1) && state[roomName].players[1].mana >= firstSkill.mana) {
                     state[roomName].players[1].mana -= hp.mana;
                 }
             }, 10);
@@ -112,7 +112,7 @@ io.on('connection', client => {
                     state[roomName].players[1].hp -= hp.damage;
                     state[roomName].players[0].mana -= hp.mana;
                     player2TakingDamage(false);
-                } else if(hp && (client.number - 1 === 0) && state[roomName].players[0].mana >= firstSkill.mana) {
+                } else if (hp && (client.number - 1 === 0) && state[roomName].players[0].mana >= firstSkill.mana) {
                     state[roomName].players[0].mana -= hp.mana;
                 }
             }, 10);

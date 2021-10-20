@@ -51,6 +51,7 @@ function collision2(object1, object2, colliderObject) {
             castedByPlayer1 = false;
         }
     }
+    return;
 }
 
 /*
@@ -146,6 +147,7 @@ function gameLoop(state) {
     }
 
     player1TakingDamage(1);
+    player2TakingDamage(1);
 
     /**
      * 
@@ -153,34 +155,18 @@ function gameLoop(state) {
      *
      **/
     if (canIMove) {
-        if (playerOne.pos.x < gameWidth && playerOne.pos.x > 0) {
-            playerOne.pos.x += playerOne.vel.x;
-        } else if (playerOne.pos.x >= gameWidth && playerOne.vel.x < 0) {
-            playerOne.pos.x += playerOne.vel.x;
-        } else if (playerOne.pos.x <= 0 && playerOne.vel.x > 0) {
+        if ((playerOne.pos.x < gameWidth && playerOne.pos.x > 0) || (playerOne.pos.x >= gameWidth && playerOne.vel.x < 0) || (playerOne.pos.x <= 0 && playerOne.vel.x > 0)) {
             playerOne.pos.x += playerOne.vel.x;
         }
-        if (playerOne.pos.y < gameHeight && playerOne.pos.y > 0) {
-            playerOne.pos.y += playerOne.vel.y;
-        } else if (playerOne.pos.y >= gameHeight && playerOne.vel.y < 0) {
-            playerOne.pos.y += playerOne.vel.y;
-        } else if (playerOne.pos.y <= 0 && playerOne.vel.y > 0) {
+        if ((playerOne.pos.y < gameHeight && playerOne.pos.y > 0) || (playerOne.pos.y >= gameHeight && playerOne.vel.y < 0) || (playerOne.pos.y <= 0 && playerOne.vel.y > 0)) {
             playerOne.pos.y += playerOne.vel.y;
         }
 
-        if (playerTwo.pos.x < gameWidth && playerTwo.pos.x > 0) {
-            playerTwo.pos.x += playerTwo.vel.x;
-        } else if (playerTwo.pos.x >= gameWidth && playerTwo.vel.x < 0) {
-            playerTwo.pos.x += playerTwo.vel.x;
-        } else if (playerTwo.pos.x <= 0 && playerTwo.vel.x > 0) {
+        if ((playerTwo.pos.x < gameWidth && playerTwo.pos.x > 0) || (playerTwo.pos.x >= gameWidth && playerTwo.vel.x < 0) || (playerTwo.pos.x <= 0 && playerTwo.vel.x > 0)) {
             playerTwo.pos.x += playerTwo.vel.x;
         }
-        if (playerTwo.pos.y < gameHeight && playerTwo.pos.y > 0) {
-            playerTwo.pos.y += playerTwo.vel.y;
-        } else if (playerTwo.pos.y >= gameHeight && playerTwo.vel.y < 0) {
-            playerTwo.pos.y += playerTwo.vel.y;
-        } else if (playerTwo.pos.y <= 0 && playerTwo.vel.y > 0) {
-            playerTwo.pos.y += playerTwo.vel.y;
+        if ((playerTwo.pos.y < gameHeight && playerTwo.pos.y > 0) || (playerTwo.pos.y >= gameHeight && playerTwo.vel.y < 0) || (playerTwo.pos.y <= 0 && playerTwo.vel.y > 0)) {
+            playerTwo.pos.y += playerTwo.vel.y;;
         }
     }    /*
     * The end of player not going out!
@@ -296,16 +282,15 @@ function getUpdatedHp(keyCode) {
  * Draw skill on canvas and controll where should it be displayed!
  */
 function getUpdatedSkill1(keyCode, state) {
+    let playerState = state;
     if (keyCode === 81) {
-        if (state.id === 1) {
+        if (playerState.id === 1) {
             castedByPlayer2 = true;
-            //handlePlayerCasts(castedByPlayer1, castedByPlayer2);
-            return { x: state.pos.x - 64, y: state.pos.y - 64, radius: 128 };
+            return { x: playerState.pos.x - 64, y: playerState.pos.y - 64, radius: 128 };
         }
-        if (state.id === 0) {
+        if (playerState.id === 0) {
             castedByPlayer1 = true;
-            //handlePlayerCasts(castedByPlayer1, castedByPlayer2);
-            return { x: state.pos.x - 64, y: state.pos.y - 64, radius: 128 };
+            return { x: playerState.pos.x - 64, y: playerState.pos.y - 64, radius: 128 };
         }
     }
 }
