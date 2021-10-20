@@ -1,6 +1,11 @@
 const { gameHeight, gameWidth, playerSpeed, firstSkill, manaRegen, hpRegen } = require('./constants');
 
 let canIMove = true;
+let castedByPlayer1 = false;
+let castedByPlayer2 = false;
+let player1GotShot = false;
+let player2GotShot = false;
+
 
 module.exports = {
     gameLoop,
@@ -9,6 +14,8 @@ module.exports = {
     getUpdatedHp,
     imageFlip,
     getUpdatedSkill1,
+    player1TakingDamage,
+    player2TakingDamage,
 }
 
 function initGame() {
@@ -23,7 +30,7 @@ function collision(object1, object2, colliderObject) {
     var distance = Math.sqrt(dx * dx + dy * dy);
     if (distance < object1.radius + object2.radius) {
         if (colliderObject === 'playersCollision') {
-
+            //console.log('player collides a player');
         }
     }
 }
@@ -33,18 +40,51 @@ function collision2(object1, object2, colliderObject) {
     var dy = object1.pos.y - object2.y;
     var distance = Math.sqrt(dx * dx + dy * dy);
     if (distance < object1.radius + object2.radius) {
-        if (colliderObject === 'playersCollision') {
-
+        if (colliderObject === 'Skill1Player1' && castedByPlayer2 === true) {
+            //console.log('player 1 is damageeed!');
+            player1GotShot = true;
+            castedByPlayer2 = false;
         }
-        if(colliderObject === 'Skill1Player1'){
-            console.log('player 1 is damageeed!');
-        }
-        if(colliderObject === 'Skill1Player2'){
-            console.log('player 2 is damaged');
+        if (colliderObject === 'Skill1Player2' && castedByPlayer1 === true) {
+            //console.log('player 2 is damaged');
+            player2GotShot = true;
+            castedByPlayer1 = false;
         }
     }
 }
 
+/*
+ * These two functions below are made to send to server changed vars, which are updated every frame, those vars determine if player should or shouldn't get hit
+ */
+function player1TakingDamage(result) {
+    let result1;
+    if (result === 1) {
+        if (player1GotShot === true) {
+            result1 = player1GotShot;
+            return result1;
+        }
+    } else if (result === false) {
+        player1GotShot = false;
+    }
+    return result1;
+}
+
+function player2TakingDamage(result) {
+    let result2;
+    if (result === 1) {
+        if (player2GotShot === true) {
+            result2 = player2GotShot;
+            return result2;
+        }
+    } else if (result === false) {
+        player2GotShot = false;
+    }
+    return result2;
+}
+
+/*
+ * Create new game state, every values are just restarted every new game click! 
+ */
 function createGameState() {
 
     return {
@@ -83,6 +123,9 @@ function createGameState() {
     };
 }
 
+/*
+ * Gameloop function makes these whole funcs declared below transfered to the server
+ */
 function gameLoop(state) {
     if (!state) {
 
@@ -95,12 +138,14 @@ function gameLoop(state) {
     const skill1 = state.skill1;
 
     collision(playerOne, playerTwo, 'playersCollision');
-    if(playerOne){
-    collision2(playerOne, skill1, 'Skill1Player1');
+    if (playerTwo.pos.x - 64 === skill1.x) {
+        collisionFirst = collision2(playerOne, skill1, 'Skill1Player1');
     }
-    if(playerTwo){
-    collision2(playerTwo, skill1, 'Skill1Player2');
+    if (playerOne.pos.x - 64 === skill1.x) {
+        collisionSecond = collision2(playerTwo, skill1, 'Skill1Player2');
     }
+
+    player1TakingDamage(1);
 
     /**
      * 
@@ -141,7 +186,7 @@ function gameLoop(state) {
     * The end of player not going out!
     */
 
-    /**
+    /*
      * if one of the players dies, end the game and choose winner
      */
     if (playerOne.hp <= 0) {
@@ -153,7 +198,7 @@ function gameLoop(state) {
     }
 
 
-    /**
+    /*
      * If mana and hp is not full regenerate it during the time
      */
     if (playerOne.mana < 200) {
@@ -184,39 +229,42 @@ function healingPotions(state) {
 
 function getUpdatedVelocity(keyCode, state) {
 
-    if(state !== null){
-    switch (keyCode) {
-        case 37: {// left
-            return { x: -playerSpeed, y: state.y };
+    if (state !== null) {
+        switch (keyCode) {
+            case 37: {// left
+                return { x: -playerSpeed, y: state.y };
+            }
+            case 38: {// down
+                return { x: state.x, y: -playerSpeed };
+            }
+            case 39: {// right
+                return { x: playerSpeed, y: state.y };
+            }
+            case 40: {// up
+                return { x: state.x, y: playerSpeed };
+            }
+            case 65: {// left
+                return { x: -playerSpeed, y: state.y };
+            }
+            case 87: {// down
+                return { x: state.x, y: -playerSpeed };
+            }
+            case 68: {// right
+                return { x: playerSpeed, y: state.y };
+            }
+            case 83: {// up
+                return { x: state.x, y: playerSpeed };
+            }
+            case 0: {
+                return { x: 0, y: 0 };
+            }
         }
-        case 38: {// down
-            return { x: state.x, y: -playerSpeed };
-        }
-        case 39: {// right
-            return { x: playerSpeed, y: state.y };
-        }
-        case 40: {// up
-            return { x: state.x, y: playerSpeed };
-        }
-        case 65: {// left
-            return { x: -playerSpeed, y: state.y };
-        }
-        case 87: {// down
-            return { x: state.x, y: -playerSpeed };
-        }
-        case 68: {// right
-            return { x: playerSpeed, y: state.y };
-        }
-        case 83: {// up
-            return { x: state.x, y: playerSpeed };
-        }
-        case 0: {
-            return { x: 0, y: 0 };
-        }
-    }
     }
 }
 
+/*
+ * This func informs server that players should have changed images when heading to other direction that image is made for
+ */
 function imageFlip(keyCode, state) {
     if (keyCode === 65 || keyCode === 37) {
         if (state === 0) {
@@ -236,17 +284,29 @@ function imageFlip(keyCode, state) {
     }
 }
 
-
+/*
+ * Gives server informations about skill if it's keyCode is pressed
+ */
 function getUpdatedHp(keyCode) {
-    if (keyCode === 81) { // Skill 1
-
+    if ((keyCode === 81)) { // Skill 1
         return firstSkill;
     }
 }
-
-function getUpdatedSkill1(keyCode, state){
-    if(keyCode === 81){
-        return { x: state.pos.x-64, y:state.pos.y-64, radius:128};
+/*
+ * Draw skill on canvas and controll where should it be displayed!
+ */
+function getUpdatedSkill1(keyCode, state) {
+    if (keyCode === 81) {
+        if (state.id === 1) {
+            castedByPlayer2 = true;
+            //handlePlayerCasts(castedByPlayer1, castedByPlayer2);
+            return { x: state.pos.x - 64, y: state.pos.y - 64, radius: 128 };
+        }
+        if (state.id === 0) {
+            castedByPlayer1 = true;
+            //handlePlayerCasts(castedByPlayer1, castedByPlayer2);
+            return { x: state.pos.x - 64, y: state.pos.y - 64, radius: 128 };
+        }
     }
 }
 

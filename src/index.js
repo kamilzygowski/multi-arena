@@ -73,26 +73,6 @@ function init() {
 
 function keydown(e) {
     socket.emit('keydown', e.keyCode);
-    /**
-     * Players flip their image if they are moving towards direction
-     */
-    /*if (e.keyCode === 37 || e.keyCode === 65){
-        if(playerNumber == 1){
-            playerImg.src = './images/player.png';
-        }else if(playerNumber == 2){
-            playerImg2.src = './images/player2.png';
-        }
-    } else if (e.keyCode === 39 || e.keyCode === 68){
-        if(playerNumber == 1){
-            playerImg.src = './images/playerF.png';
-        } else if(playerNumber == 2){
-            playerImg2.src = './images/player2F.png';
-        }
-    }*/
-    /**
-     * Attack when spacebar is pressed
-     */
-
 }
 
 function keyup(e) {

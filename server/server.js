@@ -4,8 +4,8 @@ const io = require('socket.io')({
     }
 });
 
-const { FRAME_RATE } = require('./constants');
-const { gameLoop, getUpdatedVelocity, initGame, getUpdatedHp, imageFlip, getUpdatedSkill1 } = require('./game');
+const { FRAME_RATE, firstSkill } = require('./constants');
+const { gameLoop, getUpdatedVelocity, initGame, getUpdatedHp, imageFlip, getUpdatedSkill1, player1TakingDamage, player2TakingDamage } = require('./game');
 const { makeid } = require('./utils');
 
 const state = {};
@@ -77,57 +77,75 @@ io.on('connection', client => {
             return;
         }
 
-        if(state[roomName]!== null){
-        /*
-         * Set character velocity by a certain value
-         */
-        const vel = getUpdatedVelocity(keyCode, state[roomName].players[client.number - 1].vel);
+        if (state[roomName] !== null) {
+            /*
+             * Set character velocity by a certain value
+             */
+            const vel = getUpdatedVelocity(keyCode, state[roomName].players[client.number - 1].vel);
 
 
-        if (vel) {
-            state[roomName].players[client.number - 1].vel = vel;
+            if (vel) {
+                state[roomName].players[client.number - 1].vel = vel;
+            }
         }
-    }
 
         /*
          * First skill damage and mana cost config
+         * We get player who used skill, then we get from game.js if this skill aimed other player, then with little delay update both players status
          */
 
         const hp = getUpdatedHp(keyCode, state[roomName].players[client.number - 1].hp);
-
         if (hp && (client.number - 1 === 1)) {
-            state[roomName].players[0].hp -= hp.damage;
-            state[roomName].players[1].mana -= hp.mana;
+            setTimeout(() => {
+                if (hp && (client.number - 1 === 1) && player1TakingDamage(1) === true && state[roomName].players[1].mana >= firstSkill.mana) {
+                    state[roomName].players[0].hp -= hp.damage;
+                    state[roomName].players[1].mana -= hp.mana;
+                    player1TakingDamage(false);
+                } else if(hp&& (client.number -1 === 1) && state[roomName].players[1].mana >= firstSkill.mana) {
+                    state[roomName].players[1].mana -= hp.mana;
+                }
+            }, 10);
         }
         if (hp && (client.number - 1 === 0)) {
-            state[roomName].players[1].hp -= hp.damage;
-            state[roomName].players[0].mana -= hp.mana;
+            setTimeout(() => {
+                if (hp && (client.number - 1 === 0) && player2TakingDamage(1) === true && state[roomName].players[0].mana >= firstSkill.mana) {
+                    state[roomName].players[1].hp -= hp.damage;
+                    state[roomName].players[0].mana -= hp.mana;
+                    player2TakingDamage(false);
+                } else if(hp && (client.number - 1 === 0) && state[roomName].players[0].mana >= firstSkill.mana) {
+                    state[roomName].players[0].mana -= hp.mana;
+                }
+            }, 10);
         }
 
         const img = imageFlip(keyCode, client.number - 1);
-        
-        if(img && (client.number - 1 === 0)){
-        state[roomName].players[client.number - 1].img = img;
+
+        if (img && (client.number - 1 === 0)) {
+            state[roomName].players[client.number - 1].img = img;
         }
         if (img && (client.number - 1 === 1)) {
             state[roomName].players[client.number - 1].img = img;
         }
 
+        /*
+         * Draw skill and delete it after a certain time
+         * Also when player doesn't have enought mana, he can't use skill and it will not be drawn on canvas
+         */
         const skill1 = getUpdatedSkill1(keyCode, state[roomName].players[client.number - 1]);
 
-        if(skill1 && (client.number - 1 === 1)){
+        if (skill1 && (client.number - 1 === 1) && state[roomName].players[1].mana >= firstSkill.mana) {
             state[roomName].skill1 = skill1;
             setTimeout(function () {
-                if(state[roomName] !== null){
-                state[roomName].skill1={};
+                if (state[roomName] !== null) {
+                    state[roomName].skill1 = {};
                 }
             }, 1500);
         }
-        if(skill1 && (client.number - 1 === 0)){
+        if (skill1 && (client.number - 1 === 0) && state[roomName].players[0].mana >= firstSkill.mana) {
             state[roomName].skill1 = skill1;
             setTimeout(function () {
-                if(state[roomName] !== null){
-                state[roomName].skill1={};
+                if (state[roomName] !== null) {
+                    state[roomName].skill1 = {};
                 }
             }, 1500);
         }
