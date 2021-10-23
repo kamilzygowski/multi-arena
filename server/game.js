@@ -1,10 +1,12 @@
-const { gameHeight, gameWidth, playerSpeed, firstSkill, manaRegen, hpRegen } = require('./constants');
+const { gameHeight, gameWidth, playerSpeed, firstSkill, manaRegen, hpRegen, firstSkillHotkey,secondSkillHotkey, secondSkill } = require('./constants');
 
 let canIMove = true;
 let castedByPlayer1 = false;
 let castedByPlayer2 = false;
 let player1GotShot = false;
 let player2GotShot = false;
+let player1FaceLeft = false;
+let player2FaceLeft = false;
 
 
 module.exports = {
@@ -16,6 +18,7 @@ module.exports = {
     getUpdatedSkill1,
     player1TakingDamage,
     player2TakingDamage,
+    getUpdatedSkill2,
 }
 
 function initGame() {
@@ -46,6 +49,16 @@ function collision2(object1, object2, colliderObject) {
             castedByPlayer2 = false;
         }
         if (colliderObject === 'Skill1Player2' && castedByPlayer1 === true) {
+            //console.log('player 2 is damaged');
+            player2GotShot = true;
+            castedByPlayer1 = false;
+        }
+        if (colliderObject === 'Skill2Player1' && castedByPlayer2 === true) {
+            //console.log('player 2 is damaged');
+            player1GotShot = true;
+            castedByPlayer2 = false;
+        }
+        if (colliderObject === 'Skill2Player2' && castedByPlayer1 === true) {
             //console.log('player 2 is damaged');
             player2GotShot = true;
             castedByPlayer1 = false;
@@ -121,6 +134,7 @@ function createGameState() {
         ],
         healingPotion: {},
         skill1: {},
+        skill2: {},
     };
 }
 
@@ -137,6 +151,7 @@ function gameLoop(state) {
     const playerTwo = state.players[1];
 
     const skill1 = state.skill1;
+    const skill2 = state.skill2;
 
     collision(playerOne, playerTwo, 'playersCollision');
     if (playerTwo.pos.x - 64 === skill1.x) {
@@ -144,6 +159,12 @@ function gameLoop(state) {
     }
     if (playerOne.pos.x - 64 === skill1.x) {
         collisionSecond = collision2(playerTwo, skill1, 'Skill1Player2');
+    }
+    if (playerTwo.pos.x + 84 === skill2.x) {
+        collisionFirst = collision2(playerOne, skill2, 'Skill2Player1');
+    }
+    if (playerOne.pos.x + 84 === skill2.x) {
+        collisionSecond = collision2(playerTwo, skill2, 'Skill2Player2');
     }
 
     player1TakingDamage(1);
@@ -254,17 +275,21 @@ function getUpdatedVelocity(keyCode, state) {
 function imageFlip(keyCode, state) {
     if (keyCode === 65 || keyCode === 37) {
         if (state === 0) {
+            player1FaceLeft = true;
             return './images/player.png';
         }
         if (state === 1) {
+            player2FaceLeft = true;
             return './images/player2.png';
         }
     }
     if (keyCode === 68 || keyCode === 39) {
         if (state === 0) {
+            player1FaceLeft = false;
             return './images/playerF.png';
         }
         if (state === 1) {
+            player2FaceLeft = false;
             return './images/player2F.png';
         }
     }
@@ -274,8 +299,11 @@ function imageFlip(keyCode, state) {
  * Gives server informations about skill if it's keyCode is pressed
  */
 function getUpdatedHp(keyCode) {
-    if ((keyCode === 81)) { // Skill 1
+    if ((keyCode === firstSkillHotkey)) { // Skill 1
         return firstSkill;
+    }
+    if(keyCode === secondSkillHotkey){
+        return secondSkill;
     }
 }
 /*
@@ -283,7 +311,7 @@ function getUpdatedHp(keyCode) {
  */
 function getUpdatedSkill1(keyCode, state) {
     let playerState = state;
-    if (keyCode === 81) {
+    if (keyCode === firstSkillHotkey) {
         if (playerState.id === 1) {
             castedByPlayer2 = true;
             return { x: playerState.pos.x - 64, y: playerState.pos.y - 64, radius: 128 };
@@ -295,6 +323,27 @@ function getUpdatedSkill1(keyCode, state) {
     }
 }
 
+function getUpdatedSkill2(keyCode, state) {
+    let playerState = state;
+    if (keyCode === secondSkillHotkey) {
+        if (playerState.id === 1 && player2FaceLeft) {
+            castedByPlayer2 = true;
+            return { x: playerState.pos.x - 512, y: playerState.pos.y, radius: 128};
+        }
+        if (playerState.id === 0 && player1FaceLeft) {
+            castedByPlayer1 = true;
+            return { x: playerState.pos.x - 512, y: playerState.pos.y, radius: 128};
+        }
+        if (playerState.id === 1 && !player2FaceLeft) {
+            castedByPlayer2 = true;
+            return { x: playerState.pos.x + 84, y: playerState.pos.y, radius: 128};
+        }
+        if (playerState.id === 0 && !player1FaceLeft) {
+            castedByPlayer1 = true;
+            return { x: playerState.pos.x + 84, y: playerState.pos.y, radius: 128};
+        }
+    }
+}
 function resetVelocity(keyCode) {
 
 }

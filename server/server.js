@@ -4,8 +4,8 @@ const io = require('socket.io')({
     }
 });
 
-const { FRAME_RATE, firstSkill } = require('./constants');
-const { gameLoop, getUpdatedVelocity, initGame, getUpdatedHp, imageFlip, getUpdatedSkill1, player1TakingDamage, player2TakingDamage } = require('./game');
+const { FRAME_RATE, firstSkill, firstSkillHotkey, secondSkill } = require('./constants');
+const { gameLoop, getUpdatedVelocity, initGame, getUpdatedHp, imageFlip, getUpdatedSkill1, player1TakingDamage, player2TakingDamage, getUpdatedSkill2 } = require('./game');
 const { makeid } = require('./utils');
 
 const state = {};
@@ -138,16 +138,39 @@ io.on('connection', client => {
             setTimeout(function () {
                 if (state[roomName] !== null) {
                     state[roomName].skill1 = {};
+                    client.emit('keydown');
                 }
-            }, 1500);
+            },450);
         }
         if (skill1 && (client.number - 1 === 0) && state[roomName].players[0].mana >= firstSkill.mana) {
             state[roomName].skill1 = skill1;
             setTimeout(function () {
                 if (state[roomName] !== null) {
                     state[roomName].skill1 = {};
+                    client.emit('keydown');
                 }
-            }, 1500);
+            },450);
+        }
+
+        const skill2 = getUpdatedSkill2(keyCode, state[roomName].players[client.number - 1]);
+
+        if (skill2 && (client.number - 1 === 1) && state[roomName].players[1].mana >= secondSkill.mana) {
+            state[roomName].skill2 = skill2;
+            setTimeout(function () {
+                if (state[roomName] !== null) {
+                    state[roomName].skill2 = {};
+                    client.emit('keydown');
+                }
+            }, 1100);
+        }
+        if (skill2 && (client.number - 1 === 0) && state[roomName].players[0].mana >= secondSkill.mana) {
+            state[roomName].skill2 = skill2;
+            setTimeout(function () {
+                if (state[roomName] !== null) {
+                    state[roomName].skill2 = {};
+                    client.emit('keydown');
+                }
+            }, 1100);
         }
     }
 

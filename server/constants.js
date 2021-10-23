@@ -20,6 +20,12 @@ const firstSkill={
     damage: 15,
     mana: 30,
 };
+const secondSkill={
+    damage: 25,
+    mana: 25,
+}
+const firstSkillHotkey = 81;
+const secondSkillHotkey = 49;
 
 
 module.exports = {
@@ -30,4 +36,7 @@ module.exports = {
     firstSkill,
     manaRegen,
     hpRegen,
+    firstSkillHotkey,
+    secondSkillHotkey,
+    secondSkill,
 }

@@ -1,16 +1,23 @@
 
 const canvasBackground = new Image;
 canvasBackground.src = './images/cityBackground.png';
+const skill2 = new Image;
+skill2.src = './images/skill2Anim.png';
 
 let thisFrame = 0;
 let frameTime = 0;
 let thisFrame2 = 0;
+let thisFrame3 = 0;
+let frameTime3 = 0;
 let frameTime2 = 0;
 let player;
 let thisPlayer;
 let playerImg = new Image;
 let playerImg2 = new Image;
 let skill1Used = false;
+
+const skill1Hotkey = 81;
+const skill2Hotkey = 49;
 
 
 const socket = io('http://localhost:3000');
@@ -21,6 +28,8 @@ socket.on('gameOver', handleGameOver);
 socket.on('gameCode', handleGameCode);
 socket.on('unknownGame', handleUnknownGame);
 socket.on('tooManyPlayers', handleTooManyPlayers);
+socket.on('skill1', drawSkill1);
+socket.on('skill2', drawSkill2);
 
 const gameScreen = document.getElementById('mainSection');
 const initialScreen = document.getElementById('initialScreen');
@@ -77,11 +86,21 @@ function init() {
 function keydown(e) {
     socket.emit('keydown', e.keyCode);
 
+    if(e.keyCode === 65 || e.keyCode === 37){
+        skill2.src = './images/skill2Anim2.png';
+    }
+    if (e.keyCode === 68 || e.keyCode === 39){
+        skill2.src=  './images/skill2Anim.png';
+    }
+
     /*
      * When skill 1 is pressed, start counting to go on to next frames
      */
-    if(e.keyCode === 81){
-        setTimeout(() => {
+    if(e.keyCode === skill1Hotkey){
+        frameTime2 = 0;
+        thisFrame2 = 0;
+    }
+        /*setTimeout(() => {
             thisFrame2 = 0;
         }, 70);
         setTimeout(() => {
@@ -96,19 +115,49 @@ function keydown(e) {
         setTimeout(() => {
             thisFrame2 = 3;
         }, 350);
+        thisFrame2 = -1;
+        return;
+    }*/
+    /*
+     * When skill 2 is pressed, start counting to go on to next frames
+     */
+    if(e.keyCode === skill2Hotkey){
+        frameTime3 = 0;
+        thisFrame3 = 0;
     }
-    thisFrame2 = -1;
+
+        /*
+        setTimeout(() => {
+            thisFrame3 = 0;
+        }, 70);
+        setTimeout(() => {
+            thisFrame3 = 1;
+        }, 140);
+        setTimeout(() => {
+            thisFrame3 = 2;
+        }, 210);
+        setTimeout(() => {
+            thisFrame3 = 3;
+        }, 280);
+        setTimeout(() => {
+            thisFrame3 = 3;
+        }, 350);
+    thisFrame3 = -1;
     return;
+    }*/
 }
 
 function keyup(e) {
     socket.emit('keyup', e.keyCode);
 }
 
-function paintGame(state) {
+function paintGame(state,e) {
     ctx.fillStyle = 'grey';
     ctx.drawImage(canvasBackground, 0, 0, canvas.width, canvas.height);
 
+    document.addEventListener('click', function(e){
+
+    })
     //
     //* Showing up players radius to see if hitboxes are fine
     //
@@ -127,7 +176,7 @@ function paintGame(state) {
      skill1.src = './images/skill1.png';
     //ctx.drawImage(skill1, state.skill1.x, state.skill1.y, 256, 256);
     drawSkill1(state.skill1, skill1);
-
+    drawSkill2(state.skill2, skill2);
     drawPlayer(state.players[0], playerImg);
     drawPlayer(state.players[1], playerImg2);
     //ctx.rotate(45 * Math.PI/180); Funny effect
@@ -144,8 +193,17 @@ function drawPlayer(playerState, playerImage) {
 }
 
 function drawSkill1(position, image){
-
+    frameTime2 += 1.45;
+    frameTime2 = frameTime2 % 51;
+    thisFrame2 = Math.round(frameTime2 / 15);
     ctx.drawImage(image, 256 * thisFrame2, 0, 256, 256, position.x, position.y, 256, 256);
+}
+
+function drawSkill2(position, image){
+    frameTime3 += 0.75;
+    frameTime3 = frameTime3 % 51;
+    thisFrame3 = Math.round(frameTime3 / 15);
+    ctx.drawImage(image, 512 * thisFrame3, 0, 512, 512, position.x, position.y, 512, 512);
 }
 
 function showCharacterStatus(state) {
