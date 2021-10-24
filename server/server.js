@@ -161,7 +161,7 @@ io.on('connection', client => {
                     state[roomName].skill2 = {};
                     client.emit('keydown');
                 }
-            }, 1100);
+            }, 350);
         }
         if (skill2 && (client.number - 1 === 0) && state[roomName].players[0].mana >= secondSkill.mana) {
             state[roomName].skill2 = skill2;
@@ -170,7 +170,7 @@ io.on('connection', client => {
                     state[roomName].skill2 = {};
                     client.emit('keydown');
                 }
-            }, 1100);
+            }, 350);
         }
     }
 

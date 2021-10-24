@@ -189,21 +189,21 @@ function drawPlayer(playerState, playerImage) {
     frameTime += 0.15;
     frameTime = frameTime % 15;
     thisFrame = Math.round(frameTime / 15);
-    ctx.drawImage(playerImage, 128 * thisFrame, 0, 128, 96, player.pos.x, player.pos.y, 128, 96);
+    ctx.drawImage(playerImage, 128 * thisFrame, 0, 128, 96, player.pos.x - 64, player.pos.y - 48, 128, 96);
 }
 
 function drawSkill1(position, image){
     frameTime2 += 1.45;
     frameTime2 = frameTime2 % 51;
     thisFrame2 = Math.round(frameTime2 / 15);
-    ctx.drawImage(image, 256 * thisFrame2, 0, 256, 256, position.x, position.y, 256, 256);
+    ctx.drawImage(image, 512 * thisFrame2, 0, 512, 512, position.x - 256, position.y - 256, 512, 512);
 }
 
 function drawSkill2(position, image){
-    frameTime3 += 0.75;
+    frameTime3 += 2.15;
     frameTime3 = frameTime3 % 51;
     thisFrame3 = Math.round(frameTime3 / 15);
-    ctx.drawImage(image, 512 * thisFrame3, 0, 512, 512, position.x, position.y, 512, 512);
+    ctx.drawImage(image, 512 * thisFrame3, 0, 512, 512, position.x - 256, position.y - 256, 512, 512);
 }
 
 function showCharacterStatus(state) {

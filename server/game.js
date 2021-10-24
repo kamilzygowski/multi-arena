@@ -154,10 +154,10 @@ function gameLoop(state) {
     const skill2 = state.skill2;
 
     collision(playerOne, playerTwo, 'playersCollision');
-    if (playerTwo.pos.x - 64 === skill1.x) {
+    if (playerTwo.pos.x - 256 === skill1.x) {
         collisionFirst = collision2(playerOne, skill1, 'Skill1Player1');
     }
-    if (playerOne.pos.x - 64 === skill1.x) {
+    if (playerOne.pos.x - 256 === skill1.x) {
         collisionSecond = collision2(playerTwo, skill1, 'Skill1Player2');
     }
     if (playerTwo.pos.x + 84 === skill2.x) {
@@ -314,11 +314,11 @@ function getUpdatedSkill1(keyCode, state) {
     if (keyCode === firstSkillHotkey) {
         if (playerState.id === 1) {
             castedByPlayer2 = true;
-            return { x: playerState.pos.x - 64, y: playerState.pos.y - 64, radius: 128 };
+            return { x: playerState.pos.x, y: playerState.pos.y, radius: 256 };
         }
         if (playerState.id === 0) {
             castedByPlayer1 = true;
-            return { x: playerState.pos.x - 64, y: playerState.pos.y - 64, radius: 128 };
+            return { x: playerState.pos.x, y: playerState.pos.y, radius: 256 };
         }
     }
 }
@@ -328,19 +328,19 @@ function getUpdatedSkill2(keyCode, state) {
     if (keyCode === secondSkillHotkey) {
         if (playerState.id === 1 && player2FaceLeft) {
             castedByPlayer2 = true;
-            return { x: playerState.pos.x - 512, y: playerState.pos.y, radius: 128};
+            return { x: playerState.pos.x - 270, y: playerState.pos.y + 208, radius: 128};
         }
         if (playerState.id === 0 && player1FaceLeft) {
             castedByPlayer1 = true;
-            return { x: playerState.pos.x - 512, y: playerState.pos.y, radius: 128};
+            return { x: playerState.pos.x - 270, y: playerState.pos.y + 208, radius: 128};
         }
         if (playerState.id === 1 && !player2FaceLeft) {
             castedByPlayer2 = true;
-            return { x: playerState.pos.x + 84, y: playerState.pos.y, radius: 128};
+            return { x: playerState.pos.x + 274, y: playerState.pos.y + 208, radius: 128};
         }
         if (playerState.id === 0 && !player1FaceLeft) {
             castedByPlayer1 = true;
-            return { x: playerState.pos.x + 84, y: playerState.pos.y, radius: 128};
+            return { x: playerState.pos.x + 274, y: playerState.pos.y + 208, radius: 128};
         }
     }
 }
