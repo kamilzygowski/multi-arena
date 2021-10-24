@@ -4,8 +4,8 @@ const io = require('socket.io')({
     }
 });
 
-const { FRAME_RATE, firstSkill, firstSkillHotkey, secondSkill } = require('./constants');
-const { gameLoop, getUpdatedVelocity, initGame, getUpdatedHp, imageFlip, getUpdatedSkill1, player1TakingDamage, player2TakingDamage, getUpdatedSkill2 } = require('./game');
+const { FRAME_RATE, firstSkill, firstSkillHotkey, secondSkill, thirdSkill } = require('./constants');
+const { gameLoop, getUpdatedVelocity, initGame, getUpdatedHp, imageFlip, getUpdatedSkill1, player1TakingDamage, player2TakingDamage, getUpdatedSkill2, getUpdatedSkill3} = require('./game');
 const { makeid } = require('./utils');
 
 const state = {};
@@ -98,6 +98,7 @@ io.on('connection', client => {
         if (hp && (client.number - 1 === 1)) {
             setTimeout(() => {
                 if (hp && (client.number - 1 === 1) && player1TakingDamage(1) === true && state[roomName].players[1].mana >= firstSkill.mana) {
+                    client.emit('minusHp', state[roomName].players[0].pos, hp.damage);
                     state[roomName].players[0].hp -= hp.damage;
                     state[roomName].players[1].mana -= hp.mana;
                     player1TakingDamage(false);
@@ -109,6 +110,7 @@ io.on('connection', client => {
         if (hp && (client.number - 1 === 0)) {
             setTimeout(() => {
                 if (hp && (client.number - 1 === 0) && player2TakingDamage(1) === true && state[roomName].players[0].mana >= firstSkill.mana) {
+                    client.emit('minusHp', state[roomName].players[1].pos, hp.damage);
                     state[roomName].players[1].hp -= hp.damage;
                     state[roomName].players[0].mana -= hp.mana;
                     player2TakingDamage(false);
@@ -138,7 +140,7 @@ io.on('connection', client => {
             setTimeout(function () {
                 if (state[roomName] !== null) {
                     state[roomName].skill1 = {};
-                    client.emit('keydown');
+                    
                 }
             },450);
         }
@@ -147,7 +149,7 @@ io.on('connection', client => {
             setTimeout(function () {
                 if (state[roomName] !== null) {
                     state[roomName].skill1 = {};
-                    client.emit('keydown');
+                    
                 }
             },450);
         }
@@ -159,7 +161,7 @@ io.on('connection', client => {
             setTimeout(function () {
                 if (state[roomName] !== null) {
                     state[roomName].skill2 = {};
-                    client.emit('keydown');
+                    
                 }
             }, 350);
         }
@@ -168,9 +170,30 @@ io.on('connection', client => {
             setTimeout(function () {
                 if (state[roomName] !== null) {
                     state[roomName].skill2 = {};
-                    client.emit('keydown');
+                    
                 }
             }, 350);
+        }
+
+        const skill3 = getUpdatedSkill3(keyCode,state[roomName].players[client.number - 1]);
+
+        if(skill3 && (client.number - 1 === 1) && state[roomName].players[1].mana >= secondSkill.mana) {
+            state[roomName].skill3 = skill3;
+            setTimeout(function () {
+                if (state[roomName] !== null) {
+                    state[roomName].skill3 = {};
+                    
+                }
+            }, thirdSkill.duration);
+        }
+        if(skill3 && (client.number - 1 === 0) && state[roomName].players[0].mana >= secondSkill.mana) {
+            state[roomName].skill3 = skill3;
+            setTimeout(function () {
+                if (state[roomName] !== null) {
+                    state[roomName].skill3 = {};
+                    
+                }
+            }, thirdSkill.duration);
         }
     }
 

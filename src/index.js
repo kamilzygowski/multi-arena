@@ -3,6 +3,8 @@ const canvasBackground = new Image;
 canvasBackground.src = './images/cityBackground.png';
 const skill2 = new Image;
 skill2.src = './images/skill2Anim.png';
+const skill3 = new Image;
+skill3.src = './images/skill3.png';
 
 let thisFrame = 0;
 let frameTime = 0;
@@ -15,6 +17,7 @@ let thisPlayer;
 let playerImg = new Image;
 let playerImg2 = new Image;
 let skill1Used = false;
+let increment = 0;
 
 const skill1Hotkey = 81;
 const skill2Hotkey = 49;
@@ -30,6 +33,7 @@ socket.on('unknownGame', handleUnknownGame);
 socket.on('tooManyPlayers', handleTooManyPlayers);
 socket.on('skill1', drawSkill1);
 socket.on('skill2', drawSkill2);
+socket.on('minusHp', minusHP);
 
 const gameScreen = document.getElementById('mainSection');
 const initialScreen = document.getElementById('initialScreen');
@@ -62,9 +66,10 @@ function joinGame() {
 }
 
 function exit() {
-    initialScreen.style.display = "block";
+    /*initialScreen.style.display = "block";
     gameScreen.style.display = "none";
-    exitButton.style.display = "none";
+    exitButton.style.display = "none";*/
+    window.location.reload();
 }
 
 function init() {
@@ -86,78 +91,37 @@ function init() {
 function keydown(e) {
     socket.emit('keydown', e.keyCode);
 
-    if(e.keyCode === 65 || e.keyCode === 37){
+    if (e.keyCode === 65 || e.keyCode === 37) {
         skill2.src = './images/skill2Anim2.png';
     }
-    if (e.keyCode === 68 || e.keyCode === 39){
-        skill2.src=  './images/skill2Anim.png';
+    if (e.keyCode === 68 || e.keyCode === 39) {
+        skill2.src = './images/skill2Anim.png';
     }
 
     /*
      * When skill 1 is pressed, start counting to go on to next frames
      */
-    if(e.keyCode === skill1Hotkey){
+    if (e.keyCode === skill1Hotkey) {
         frameTime2 = 0;
         thisFrame2 = 0;
     }
-        /*setTimeout(() => {
-            thisFrame2 = 0;
-        }, 70);
-        setTimeout(() => {
-            thisFrame2 = 1;
-        }, 140);
-        setTimeout(() => {
-            thisFrame2 = 2;
-        }, 210);
-        setTimeout(() => {
-            thisFrame2 = 3;
-        }, 280);
-        setTimeout(() => {
-            thisFrame2 = 3;
-        }, 350);
-        thisFrame2 = -1;
-        return;
-    }*/
     /*
      * When skill 2 is pressed, start counting to go on to next frames
      */
-    if(e.keyCode === skill2Hotkey){
+    if (e.keyCode === skill2Hotkey) {
         frameTime3 = 0;
         thisFrame3 = 0;
     }
-
-        /*
-        setTimeout(() => {
-            thisFrame3 = 0;
-        }, 70);
-        setTimeout(() => {
-            thisFrame3 = 1;
-        }, 140);
-        setTimeout(() => {
-            thisFrame3 = 2;
-        }, 210);
-        setTimeout(() => {
-            thisFrame3 = 3;
-        }, 280);
-        setTimeout(() => {
-            thisFrame3 = 3;
-        }, 350);
-    thisFrame3 = -1;
-    return;
-    }*/
 }
 
 function keyup(e) {
     socket.emit('keyup', e.keyCode);
 }
 
-function paintGame(state,e) {
+function paintGame(state) {
     ctx.fillStyle = 'grey';
     ctx.drawImage(canvasBackground, 0, 0, canvas.width, canvas.height);
 
-    document.addEventListener('click', function(e){
-
-    })
     //
     //* Showing up players radius to see if hitboxes are fine
     //
@@ -170,13 +134,17 @@ function paintGame(state,e) {
     playerImg.src = state.players[0].img;
     playerImg2.src = state.players[1].img;
     /**
-     * SKill1 drawing
+     * Skills drawing
      */
     const skill1 = new Image;
-     skill1.src = './images/skill1.png';
-    //ctx.drawImage(skill1, state.skill1.x, state.skill1.y, 256, 256);
+    skill1.src = './images/skill1.png';
     drawSkill1(state.skill1, skill1);
     drawSkill2(state.skill2, skill2);
+    drawSkill3(state.skill3, skill3);
+
+    /*
+     * Players drawing
+     */
     drawPlayer(state.players[0], playerImg);
     drawPlayer(state.players[1], playerImg2);
     //ctx.rotate(45 * Math.PI/180); Funny effect
@@ -192,18 +160,22 @@ function drawPlayer(playerState, playerImage) {
     ctx.drawImage(playerImage, 128 * thisFrame, 0, 128, 96, player.pos.x - 64, player.pos.y - 48, 128, 96);
 }
 
-function drawSkill1(position, image){
+function drawSkill1(position, image) {
     frameTime2 += 1.45;
     frameTime2 = frameTime2 % 51;
     thisFrame2 = Math.round(frameTime2 / 15);
     ctx.drawImage(image, 512 * thisFrame2, 0, 512, 512, position.x - 256, position.y - 256, 512, 512);
 }
 
-function drawSkill2(position, image){
+function drawSkill2(position, image) {
     frameTime3 += 2.15;
     frameTime3 = frameTime3 % 51;
     thisFrame3 = Math.round(frameTime3 / 15);
-    ctx.drawImage(image, 512 * thisFrame3, 0, 512, 512, position.x - 256, position.y - 256, 512, 512);
+    ctx.drawImage(image, 512 * thisFrame3, 0, 512, 512, position.x - 256 + 10, position.y - 256 + 208, 512, 512);
+}
+
+function drawSkill3(position, image) {
+    ctx.drawImage(image, position.x - 128, position.y - 128, 256, 256);
 }
 
 function showCharacterStatus(state) {
@@ -218,10 +190,6 @@ function showCharacterStatus(state) {
 
 function handleInit(number) {
     playerNumber = number;
-}
-
-function showHitboxes() {
-
 }
 
 function handleGameState(gameState) {
@@ -260,6 +228,19 @@ function handleUnknownGame() {
 function handleTooManyPlayers() {
     reset();
     alert("This game is already in progress!");
+}
+
+function minusHP(state, value) {
+    const displayDamage = setInterval(() => {
+        increment += 0.3;
+        ctx.font = '600 36px abaddon';
+        ctx.fillStyle = "#ff3838";
+        ctx.fillText('-' + value, state.x - 30, state.y - 25 - increment);
+    }, 1 / 3600);
+    setTimeout(() => {
+        clearInterval(displayDamage);
+        increment = 0;
+    }, 1000);
 }
 
 function reset() {

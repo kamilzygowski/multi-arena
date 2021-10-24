@@ -1,4 +1,4 @@
-const { gameHeight, gameWidth, playerSpeed, firstSkill, manaRegen, hpRegen, firstSkillHotkey,secondSkillHotkey, secondSkill } = require('./constants');
+const { gameHeight, gameWidth, playerSpeed, firstSkill, manaRegen, hpRegen, firstSkillHotkey,secondSkillHotkey, secondSkill, thirdSkillHotkey, thirdSkill } = require('./constants');
 
 let canIMove = true;
 let castedByPlayer1 = false;
@@ -19,6 +19,7 @@ module.exports = {
     player1TakingDamage,
     player2TakingDamage,
     getUpdatedSkill2,
+    getUpdatedSkill3,
 }
 
 function initGame() {
@@ -43,6 +44,7 @@ function collision2(object1, object2, colliderObject) {
     var dy = object1.pos.y - object2.y;
     var distance = Math.sqrt(dx * dx + dy * dy);
     if (distance < object1.radius + object2.radius) {
+        /* Skill 1 */
         if (colliderObject === 'Skill1Player1' && castedByPlayer2 === true) {
             //console.log('player 1 is damageeed!');
             player1GotShot = true;
@@ -53,6 +55,7 @@ function collision2(object1, object2, colliderObject) {
             player2GotShot = true;
             castedByPlayer1 = false;
         }
+        /* Skill 2 */
         if (colliderObject === 'Skill2Player1' && castedByPlayer2 === true) {
             //console.log('player 2 is damaged');
             player1GotShot = true;
@@ -62,6 +65,23 @@ function collision2(object1, object2, colliderObject) {
             //console.log('player 2 is damaged');
             player2GotShot = true;
             castedByPlayer1 = false;
+        }
+        /* Skill 3 */
+        if (colliderObject === 'Skill3Player1') {
+            console.log('XDD');
+            canIMove = false;
+            castedByPlayer2 = false;
+            setTimeout(() => {
+                canIMove = true;
+            }, thirdSkill.duration);
+        }
+        if (colliderObject === 'Skill3Player2') {
+            canIMove = false;
+            console.log('SDDDD');
+            castedByPlayer1 = false;
+            setTimeout(() => {
+                canIMove = true;
+            }, thirdSkill.duration);
         }
     }
     return;
@@ -135,11 +155,12 @@ function createGameState() {
         healingPotion: {},
         skill1: {},
         skill2: {},
+        skill3: {},
     };
 }
 
 /*
- * Gameloop function makes these whole funcs declared below transfered to the server
+ * Gameloop function makes these whole funcs declared below transfered to the server and get it to the setinterval
  */
 function gameLoop(state) {
     if (!state) {
@@ -152,19 +173,29 @@ function gameLoop(state) {
 
     const skill1 = state.skill1;
     const skill2 = state.skill2;
+    const skill3 = state.skill3;
 
     collision(playerOne, playerTwo, 'playersCollision');
-    if (playerTwo.pos.x - 256 === skill1.x) {
+    /* Skill 1 */
+    if (playerTwo.pos.x === skill1.x) {
         collisionFirst = collision2(playerOne, skill1, 'Skill1Player1');
     }
-    if (playerOne.pos.x - 256 === skill1.x) {
+    if (playerOne.pos.x === skill1.x) {
         collisionSecond = collision2(playerTwo, skill1, 'Skill1Player2');
     }
-    if (playerTwo.pos.x + 84 === skill2.x) {
+    /* Skill 2 */
+    if (playerTwo.pos.x + 274 === skill2.x || playerTwo.pos.x -270 === skill2.x) {
         collisionFirst = collision2(playerOne, skill2, 'Skill2Player1');
     }
-    if (playerOne.pos.x + 84 === skill2.x) {
+    if (playerOne.pos.x + 274 === skill2.x || playerOne.pos.x -270 === skill2.x) {
         collisionSecond = collision2(playerTwo, skill2, 'Skill2Player2');
+    }
+    /* Skill 3 */
+    if (playerOne.pos.x + 90 === skill3.x || playerOne.pos.x -90 === skill3.x) {
+        collisionSecond = collision2(playerTwo, skill3, 'Skill3Player2');
+    }
+    if (playerTwo.pos.x + 90 === skill3.x || playerTwo.pos.x -90 === skill3.x) {
+        collisionFirst = collision2(playerOne, skill3, 'Skill3Player1');
     }
 
     player1TakingDamage(1);
@@ -328,22 +359,45 @@ function getUpdatedSkill2(keyCode, state) {
     if (keyCode === secondSkillHotkey) {
         if (playerState.id === 1 && player2FaceLeft) {
             castedByPlayer2 = true;
-            return { x: playerState.pos.x - 270, y: playerState.pos.y + 208, radius: 128};
+            return { x: playerState.pos.x - 270, y: playerState.pos.y, radius: 96};
         }
         if (playerState.id === 0 && player1FaceLeft) {
             castedByPlayer1 = true;
-            return { x: playerState.pos.x - 270, y: playerState.pos.y + 208, radius: 128};
+            return { x: playerState.pos.x - 270, y: playerState.pos.y, radius: 96};
         }
         if (playerState.id === 1 && !player2FaceLeft) {
             castedByPlayer2 = true;
-            return { x: playerState.pos.x + 274, y: playerState.pos.y + 208, radius: 128};
+            return { x: playerState.pos.x + 274, y: playerState.pos.y, radius: 96};
         }
         if (playerState.id === 0 && !player1FaceLeft) {
             castedByPlayer1 = true;
-            return { x: playerState.pos.x + 274, y: playerState.pos.y + 208, radius: 128};
+            return { x: playerState.pos.x + 274, y: playerState.pos.y, radius: 96};
         }
     }
 }
+
+function getUpdatedSkill3(keyCode, state) {
+    let playerState = state;
+    if (keyCode === thirdSkillHotkey) {
+        if (playerState.id === 1 && player2FaceLeft) {
+            castedByPlayer2 = true;
+            return { x: playerState.pos.x - 90 , y: playerState.pos.y, radius: 128};
+        }
+        if (playerState.id === 0 && player1FaceLeft) {
+            castedByPlayer1 = true;
+            return { x: playerState.pos.x - 90 , y: playerState.pos.y, radius: 128};
+        }
+        if (playerState.id === 1 && !player2FaceLeft) {
+            castedByPlayer2 = true;
+            return { x: playerState.pos.x + 90, y: playerState.pos.y, radius: 128};
+        }
+        if (playerState.id === 0 && !player1FaceLeft) {
+            castedByPlayer1 = true;
+            return { x: playerState.pos.x + 90, y: playerState.pos.y, radius: 128};
+        }
+    }
+}
+
 function resetVelocity(keyCode) {
 
 }

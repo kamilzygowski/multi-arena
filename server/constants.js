@@ -24,8 +24,12 @@ const secondSkill={
     damage: 25,
     mana: 25,
 }
+const thirdSkill ={
+    duration: 6350, // in miliseconds
+}
 const firstSkillHotkey = 81;
 const secondSkillHotkey = 49;
+const thirdSkillHotkey = 50;
 
 
 module.exports = {
@@ -39,4 +43,6 @@ module.exports = {
     firstSkillHotkey,
     secondSkillHotkey,
     secondSkill,
+    thirdSkillHotkey,
+    thirdSkill,
 }
