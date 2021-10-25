@@ -12,6 +12,8 @@ let thisFrame2 = 0;
 let thisFrame3 = 0;
 let frameTime3 = 0;
 let frameTime2 = 0;
+let thisFrame4 =0;
+let frameTime4 = 0;
 let player;
 let thisPlayer;
 let playerImg = new Image;
@@ -175,7 +177,12 @@ function drawSkill2(position, image) {
 }
 
 function drawSkill3(position, image) {
-    ctx.drawImage(image, position.x - 128, position.y - 128, 256, 256);
+    //ctx.drawImage(image, position.x - 128, position.y - 128, 256, 256);
+    frameTime4 += 2.15;
+    frameTime4 = frameTime4 % 51;
+    thisFrame4 = Math.round(frameTime4 / 15);
+    ctx.drawImage(image, 256 * thisFrame4, 0, 256, 256, position.x - 128, position.y - 128, 256, 256);
+
 }
 
 function showCharacterStatus(state) {

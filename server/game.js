@@ -1,12 +1,16 @@
 const { gameHeight, gameWidth, playerSpeed, firstSkill, manaRegen, hpRegen, firstSkillHotkey,secondSkillHotkey, secondSkill, thirdSkillHotkey, thirdSkill } = require('./constants');
 
 let canIMove = true;
+let canMoveRight = true;
+let canMoveLeft = true;
 let castedByPlayer1 = false;
 let castedByPlayer2 = false;
 let player1GotShot = false;
 let player2GotShot = false;
 let player1FaceLeft = false;
 let player2FaceLeft = false;
+let canPlayer1Move = true;
+let canPlayer2Move = true;
 
 
 module.exports = {
@@ -68,20 +72,20 @@ function collision2(object1, object2, colliderObject) {
         }
         /* Skill 3 */
         if (colliderObject === 'Skill3Player1') {
-            console.log('XDD');
-            canIMove = false;
+            canPlayer1Move = false;
             castedByPlayer2 = false;
             setTimeout(() => {
-                canIMove = true;
-            }, thirdSkill.duration);
+                canPlayer1Move = true;
+            }, thirdSkill.duration/3);
+            canMoveRight = false;
         }
         if (colliderObject === 'Skill3Player2') {
-            canIMove = false;
-            console.log('SDDDD');
+            canPlayer2Move = false;  //VERY GOOD EXAMPLE OF STUNN, it will be needed later
             castedByPlayer1 = false;
             setTimeout(() => {
-                canIMove = true;
-            }, thirdSkill.duration);
+                canPlayer2Move = true;
+            }, thirdSkill.duration/3);
+            canMoveRight = false;
         }
     }
     return;
@@ -206,20 +210,51 @@ function gameLoop(state) {
      This block is controling where is the edge of the screen and makes player not corssing those edges
      *
      **/
-    if (canIMove) {
+    if (canPlayer1Move) {
+        /*var dx = playerOne.pos.x - skill3.x;
+        var dy = playerOne.pos.y - skill3.y;
+        var dx1 = playerTwo.pos.x - skill3.x;
+        var dy1 = playerTwo.pos.y - skill3.y;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        var distance1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);*/
+        //console.log(dx, dy);
+        
         if ((playerOne.pos.x < gameWidth && playerOne.pos.x > 0) || (playerOne.pos.x >= gameWidth && playerOne.vel.x < 0) || (playerOne.pos.x <= 0 && playerOne.vel.x > 0)) {
+            /* The block of code which makes player nr 1 not able to get through the wall (skill3) in x axis */
+            /*if( !(distance<= playerOne.radius + skill3.radius && dx <= 0) && playerOne.vel.x > 0 ){
             playerOne.pos.x += playerOne.vel.x;
-        }
+            } else if (!(distance<= playerOne.radius + skill3.radius && dx >= 0) && playerOne.vel.x < 0 ){*/
+                playerOne.pos.x += playerOne.vel.x;
+            //}
+        } 
         if ((playerOne.pos.y < gameHeight && playerOne.pos.y > 0) || (playerOne.pos.y >= gameHeight && playerOne.vel.y < 0) || (playerOne.pos.y <= 0 && playerOne.vel.y > 0)) {
-            playerOne.pos.y += playerOne.vel.y;
+           /* The block of code which makes player nr 1 not able to get through the wall (skill3) in y axis */
+            /*if( !(distance<= playerOne.radius + skill3.radius && dy <= 0) && playerOne.vel.y > 0){
+                playerOne.pos.y += playerOne.vel.y;
+                } else if (!(distance<= playerOne.radius + skill3.radius && dy >= 0) && playerOne.vel.y < 0){*/
+                    playerOne.pos.y += playerOne.vel.y;
+                //}
         }
+    }
+    if(canPlayer2Move){
 
         if ((playerTwo.pos.x < gameWidth && playerTwo.pos.x > 0) || (playerTwo.pos.x >= gameWidth && playerTwo.vel.x < 0) || (playerTwo.pos.x <= 0 && playerTwo.vel.x > 0)) {
-            playerTwo.pos.x += playerTwo.vel.x;
+            /* The block of code which makes player nr 2 not able to get through the wall (skill3) in x axis */
+            /*if( !(distance1<= playerTwo.radius + skill3.radius && dx <= 0) && playerTwo.vel.x > 0){
+                playerTwo.pos.x += playerTwo.vel.x;
+                } else if (!(distance1<= playerTwo.radius + skill3.radius && dx >= 0) && playerTwo.vel.x < 0){*/
+                    playerTwo.pos.x += playerTwo.vel.x;
+                //}
         }
-        if ((playerTwo.pos.y < gameHeight && playerTwo.pos.y > 0) || (playerTwo.pos.y >= gameHeight && playerTwo.vel.y < 0) || (playerTwo.pos.y <= 0 && playerTwo.vel.y > 0)) {
-            playerTwo.pos.y += playerTwo.vel.y;;
+        if (((playerTwo.pos.y < gameHeight && playerTwo.pos.y > 0) || (playerTwo.pos.y >= gameHeight && playerTwo.vel.y < 0) || (playerTwo.pos.y <= 0 && playerTwo.vel.y > 0))) {
+            /* The block of code which makes player nr 2 not able to get through the wall (skill3) in x axis */
+            /*if( !(distance1<= playerTwo.radius + skill3.radius && dy <= 0) && playerTwo.vel.y > 0){
+                playerTwo.pos.y += playerTwo.vel.y;
+                } else if (!(distance1<= playerTwo.radius + skill3.radius && dy >= 0) && playerTwo.vel.y < 0){*/
+                    playerTwo.pos.y += playerTwo.vel.y;
+                //}
         }
+
     }    /*
     * The end of player not going out!
     */
@@ -381,19 +416,19 @@ function getUpdatedSkill3(keyCode, state) {
     if (keyCode === thirdSkillHotkey) {
         if (playerState.id === 1 && player2FaceLeft) {
             castedByPlayer2 = true;
-            return { x: playerState.pos.x - 90 , y: playerState.pos.y, radius: 128};
+            return { x: playerState.pos.x - 90 , y: playerState.pos.y, radius: 48};
         }
         if (playerState.id === 0 && player1FaceLeft) {
             castedByPlayer1 = true;
-            return { x: playerState.pos.x - 90 , y: playerState.pos.y, radius: 128};
+            return { x: playerState.pos.x - 90 , y: playerState.pos.y, radius: 48};
         }
         if (playerState.id === 1 && !player2FaceLeft) {
             castedByPlayer2 = true;
-            return { x: playerState.pos.x + 90, y: playerState.pos.y, radius: 128};
+            return { x: playerState.pos.x + 90, y: playerState.pos.y, radius: 48};
         }
         if (playerState.id === 0 && !player1FaceLeft) {
             castedByPlayer1 = true;
-            return { x: playerState.pos.x + 90, y: playerState.pos.y, radius: 128};
+            return { x: playerState.pos.x + 90, y: playerState.pos.y, radius: 48};
         }
     }
 }
