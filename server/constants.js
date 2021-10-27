@@ -12,6 +12,7 @@ const gameWidth = 1360;
 const playerSpeed = 16;
 const manaRegen = 0.05;
 const hpRegen =0.0025;
+const exhaust = 1000;
 
 /*
  * Skills setup
@@ -45,4 +46,5 @@ module.exports = {
     secondSkill,
     thirdSkillHotkey,
     thirdSkill,
+    exhaust,
 }

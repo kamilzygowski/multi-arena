@@ -1,4 +1,4 @@
-const { gameHeight, gameWidth, playerSpeed, firstSkill, manaRegen, hpRegen, firstSkillHotkey,secondSkillHotkey, secondSkill, thirdSkillHotkey, thirdSkill } = require('./constants');
+const { gameHeight, gameWidth, playerSpeed, firstSkill, manaRegen, hpRegen, firstSkillHotkey,secondSkillHotkey, secondSkill, thirdSkillHotkey, thirdSkill,exhaust } = require('./constants');
 
 let canIMove = true;
 let canMoveRight = true;
@@ -159,7 +159,7 @@ function createGameState() {
         healingPotion: {},
         skill1: {},
         skill2: {},
-        skill3: {},
+        skill3: [],
     };
 }
 

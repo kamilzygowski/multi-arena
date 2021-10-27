@@ -12,6 +12,7 @@ html {
     background-position: top;
     color:#fff;
     font-family: 'abaddon';
+    background-color: #030d19;
 }
 
 #mainSection {
@@ -22,7 +23,8 @@ html {
     border: 3px solid #fff;
     background:url('../images/waitingScreen.gif');
     background-size: cover;
-    background-position: top;
+    background-position: center;
+    z-index: 0;
 }
 
 #initialScreen {

@@ -48,6 +48,7 @@ io.on('connection', client => {
         client.emit('init', 2);
 
         startGameInterval(roomName);
+        
         console.log('game has started');
     }
 

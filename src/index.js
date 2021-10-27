@@ -1,11 +1,11 @@
+const canvasBackground = "url('../images/background.png')"
 
-const canvasBackground = new Image;
-canvasBackground.src = './images/background.png';
 const skill2 = new Image;
 skill2.src = './images/skill2Anim.png';
 const skill3 = new Image;
 skill3.src = './images/skill3.png';
 
+/* Frame and looping vars */
 let thisFrame = 0;
 let frameTime = 0;
 let thisFrame2 = 0;
@@ -21,6 +21,7 @@ let playerImg2 = new Image;
 let skill1Used = false;
 let increment = 0;
 
+/* Hotkeys */
 const skill1Hotkey = 81;
 const skill2Hotkey = 49;
 
@@ -37,6 +38,7 @@ socket.on('skill1', drawSkill1);
 socket.on('skill2', drawSkill2);
 socket.on('minusHp', minusHP);
 
+/* Important query selectors */
 const gameScreen = document.getElementById('mainSection');
 const initialScreen = document.getElementById('initialScreen');
 const newGameBtn = document.getElementById('newGameButton');
@@ -121,8 +123,9 @@ function keyup(e) {
 }
 
 function paintGame(state) {
-    ctx.fillStyle = 'grey';
-    ctx.drawImage(canvasBackground, 0, 0, canvas.width, canvas.height);
+    //ctx.fillStyle = 'grey';
+    //ctx.drawImage(canvasBackground, 0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0,0,canvas.width, canvas.height);
 
     //
     //* Showing up players radius to see if hitboxes are fine
@@ -197,11 +200,18 @@ function showCharacterStatus(state) {
 
 function handleInit(number) {
     playerNumber = number;
+
 }
 
 function handleGameState(gameState) {
+    /*
+     * When both players are ready change the waiting screen to Background screen 
+     */
+    if (gameActive){
+        gameScreen.style.background = canvasBackground;
+    }
     if (!gameActive) {
-        return;
+        return;      
     }
     gameState = JSON.parse(gameState);
     requestAnimationFrame(() => paintGame(gameState))
