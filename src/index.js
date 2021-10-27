@@ -1,6 +1,6 @@
 
 const canvasBackground = new Image;
-canvasBackground.src = './images/cityBackground.png';
+canvasBackground.src = './images/background.png';
 const skill2 = new Image;
 skill2.src = './images/skill2Anim.png';
 const skill3 = new Image;

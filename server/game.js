@@ -73,7 +73,7 @@ function collision2(object1, object2, colliderObject) {
         /* Skill 3 */
         if (colliderObject === 'Skill3Player1') {
             canPlayer1Move = false;
-            castedByPlayer2 = false;
+            
             setTimeout(() => {
                 canPlayer1Move = true;
             }, thirdSkill.duration/3);
@@ -81,7 +81,7 @@ function collision2(object1, object2, colliderObject) {
         }
         if (colliderObject === 'Skill3Player2') {
             canPlayer2Move = false;  //VERY GOOD EXAMPLE OF STUNN, it will be needed later
-            castedByPlayer1 = false;
+            
             setTimeout(() => {
                 canPlayer2Move = true;
             }, thirdSkill.duration/3);
@@ -195,12 +195,10 @@ function gameLoop(state) {
         collisionSecond = collision2(playerTwo, skill2, 'Skill2Player2');
     }
     /* Skill 3 */
-    if (playerOne.pos.x + 90 === skill3.x || playerOne.pos.x -90 === skill3.x) {
+
+    
         collisionSecond = collision2(playerTwo, skill3, 'Skill3Player2');
-    }
-    if (playerTwo.pos.x + 90 === skill3.x || playerTwo.pos.x -90 === skill3.x) {
         collisionFirst = collision2(playerOne, skill3, 'Skill3Player1');
-    }
 
     player1TakingDamage(1);
     player2TakingDamage(1);
@@ -412,7 +410,7 @@ function getUpdatedSkill2(keyCode, state) {
 }
 
 function getUpdatedSkill3(keyCode, state) {
-    let playerState = state;
+    const playerState = state;
     if (keyCode === thirdSkillHotkey) {
         if (playerState.id === 1 && player2FaceLeft) {
             castedByPlayer2 = true;
