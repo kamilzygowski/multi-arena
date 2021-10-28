@@ -5,7 +5,7 @@ const io = require('socket.io')({
 });
 
 const { FRAME_RATE, firstSkill, firstSkillHotkey, secondSkill, thirdSkill } = require('./constants');
-const { gameLoop, getUpdatedVelocity, initGame, getUpdatedHp, imageFlip, getUpdatedSkill1, player1TakingDamage, player2TakingDamage, getUpdatedSkill2, getUpdatedSkill3} = require('./game');
+const { gameLoop, getUpdatedVelocity, initGame, getUpdatedHp, imageFlip, getUpdatedSkill1, player1TakingDamage, player2TakingDamage, getUpdatedSkill2, getUpdatedSkill3 } = require('./game');
 const { makeid } = require('./utils');
 
 const state = {};
@@ -48,7 +48,7 @@ io.on('connection', client => {
         client.emit('init', 2);
 
         startGameInterval(roomName);
-        
+
         console.log('game has started');
     }
 
@@ -137,62 +137,70 @@ io.on('connection', client => {
         const skill1 = getUpdatedSkill1(keyCode, state[roomName].players[client.number - 1]);
 
         if (skill1 && (client.number - 1 === 1) && state[roomName].players[1].mana >= firstSkill.mana) {
-            state[roomName].skill1 = skill1;
+            state[roomName].skill1.push(skill1);
             setTimeout(function () {
                 if (state[roomName] !== null) {
-                    state[roomName].skill1 = {};
-                    
+                    state[roomName].skill1 = [];
+
                 }
-            },450);
+            }, 450);
         }
         if (skill1 && (client.number - 1 === 0) && state[roomName].players[0].mana >= firstSkill.mana) {
-            state[roomName].skill1 = skill1;
+            state[roomName].skill1.push(skill1);
             setTimeout(function () {
                 if (state[roomName] !== null) {
-                    state[roomName].skill1 = {};
-                    
+                    state[roomName].skill1 = [];
+
                 }
-            },450);
+            }, 450);
         }
 
         const skill2 = getUpdatedSkill2(keyCode, state[roomName].players[client.number - 1]);
 
         if (skill2 && (client.number - 1 === 1) && state[roomName].players[1].mana >= secondSkill.mana) {
-            state[roomName].skill2 = skill2;
+            state[roomName].skill2.push(skill2);
             setTimeout(function () {
                 if (state[roomName] !== null) {
-                    state[roomName].skill2 = {};
-                    
+                    state[roomName].skill2 = [];
+
                 }
             }, 350);
         }
         if (skill2 && (client.number - 1 === 0) && state[roomName].players[0].mana >= secondSkill.mana) {
-            state[roomName].skill2 = skill2;
+            state[roomName].skill2.push(skill2);
             setTimeout(function () {
                 if (state[roomName] !== null) {
-                    state[roomName].skill2 = {};
-                    
+                    state[roomName].skill2 = [];
+
                 }
             }, 350);
         }
 
-        const skill3 = getUpdatedSkill3(keyCode,state[roomName].players[client.number - 1]);
+        const skill3 = getUpdatedSkill3(keyCode, state[roomName].players[client.number - 1]);
 
-        if(skill3 && (client.number - 1 === 1) && state[roomName].players[1].mana >= secondSkill.mana) {
-            state[roomName].skill3 = skill3;
+        if (skill3 && (client.number - 1 === 1) && state[roomName].players[1].mana >= secondSkill.mana) {
+            state[roomName].skill3.push(skill3);
             setTimeout(function () {
                 if (state[roomName] !== null) {
-                    state[roomName].skill3 = {};
-                    
+                    state[roomName].skill3.forEach(object => {
+                        const index = state[roomName].skill3.indexOf(object);
+                        state[roomName].skill3.splice(index, 1);
+                    })
+
+
                 }
             }, thirdSkill.duration);
         }
-        if(skill3 && (client.number - 1 === 0) && state[roomName].players[0].mana >= secondSkill.mana) {
-            state[roomName].skill3 = skill3;
+        if (skill3 && (client.number - 1 === 0) && state[roomName].players[0].mana >= secondSkill.mana) {
+            state[roomName].skill3.push(skill3);
             setTimeout(function () {
                 if (state[roomName] !== null) {
-                    state[roomName].skill3 = {};
-                    
+                    state[roomName].skill3.forEach(object => {
+                        const index = state[roomName].skill3.indexOf(object);
+                        state[roomName].skill3.splice(index, 1);
+                    })
+
+
                 }
             }, thirdSkill.duration);
         }

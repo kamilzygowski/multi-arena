@@ -28,9 +28,9 @@ const secondSkill={
 const thirdSkill ={
     duration: 6350, // in miliseconds
 }
-const firstSkillHotkey = 81;
-const secondSkillHotkey = 49;
-const thirdSkillHotkey = 50;
+const firstSkillHotkey = 49;
+const secondSkillHotkey = 50;
+const thirdSkillHotkey = 51;
 
 
 module.exports = {

@@ -88,6 +88,58 @@ html {
     margin-bottom: -10px;
 }
 
+#instructionsButton{
+    height: 135px;
+    width:290px;
+    left:70%;
+    top:30%;
+    background: url("../images/button2.png");
+    background-size: cover;
+    background-position: center;
+    border:none;
+    font-size: 46px;
+    font-weight: 700;
+    font-family: 'abaddon';
+    color:#fff;
+    position:absolute;
+}
+
+#instructionsDiv{
+    width:1150px;
+    height: 750px;
+    margin: auto auto;
+    margin-top: 65px;
+    background: #fd79a8;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    display: none;
+    border: #000 3px solid;
+    border-radius: 9px;
+}
+
+.instructionsHeader{
+    padding-top:45px;
+    font-size: 72px;
+}
+
+.instructionsList {
+    font-size: 36px;
+    margin-top: 5px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#instructionsButton:hover{
+    background: url("../images/button2P2.png");
+    background-size: cover;
+    background-position: center;
+    margin-top: 10px;
+    margin-bottom: -10px;
+}
+
 .header {
     margin-left: 38.8%;
     font-size: 84px;
@@ -100,6 +152,7 @@ html {
     width: 380px;
     height:40px;
     padding:auto;
+    display: none;
 }
 
 .or{

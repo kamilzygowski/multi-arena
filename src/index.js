@@ -12,7 +12,7 @@ let thisFrame2 = 0;
 let thisFrame3 = 0;
 let frameTime3 = 0;
 let frameTime2 = 0;
-let thisFrame4 =0;
+let thisFrame4 = 0;
 let frameTime4 = 0;
 let player;
 let thisPlayer;
@@ -22,8 +22,9 @@ let skill1Used = false;
 let increment = 0;
 
 /* Hotkeys */
-const skill1Hotkey = 81;
-const skill2Hotkey = 49;
+const skill1Hotkey = 49;
+const skill2Hotkey = 50;
+const skill3Hotkey = 51;
 
 
 const socket = io('http://localhost:3000');
@@ -46,10 +47,14 @@ const joinGameBtn = document.getElementById('joinGameButton');
 const gameCodeInput = document.getElementById('gameCodeInput');
 const gameCodeDisplay = document.getElementById('gameCodeDisplay');
 const exitButton = document.getElementById('exitButton');
+const instructionsButton = document.getElementById('instructionsButton');
+const yourGameCodeString = document.getElementById('header2');
+const instructionsDiv = document.getElementById('instructionsDiv');
 
 newGameBtn.addEventListener('click', newGame);
 joinGameBtn.addEventListener('click', joinGame);
 exitButton.addEventListener('click', exit);
+instructionsButton.addEventListener('click', instructions);
 
 
 let ctx;
@@ -76,10 +81,19 @@ function exit() {
     window.location.reload();
 }
 
+function instructions() {
+    exitButton.style.display = "block";
+    initialScreen.style.display = "none";
+    instructionsButton.style.display = "none";
+    instructionsDiv.style.display = "flex";
+}
+
 function init() {
     exitButton.style.display = "block";
     initialScreen.style.display = "none";
     gameScreen.style.display = "block";
+    instructionsButton.style.display = "none";
+    yourGameCodeString.style.display = "block";
 
     canvas = document.getElementById('mainSection');
     ctx = canvas.getContext('2d');
@@ -123,9 +137,7 @@ function keyup(e) {
 }
 
 function paintGame(state) {
-    //ctx.fillStyle = 'grey';
-    //ctx.drawImage(canvasBackground, 0, 0, canvas.width, canvas.height);
-    ctx.clearRect(0,0,canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     //
     //* Showing up players radius to see if hitboxes are fine
@@ -143,9 +155,21 @@ function paintGame(state) {
      */
     const skill1 = new Image;
     skill1.src = './images/skill1.png';
-    drawSkill1(state.skill1, skill1);
-    drawSkill2(state.skill2, skill2);
-    drawSkill3(state.skill3, skill3);
+    /* Count img animation frames every frame */
+    frameTime3 += 2.15;
+    frameTime4 += 2.15;
+    frameTime2 += 1.45;
+
+    state.skill1.forEach(object => {
+        drawSkill1(object, skill1);
+    });
+    state.skill3.forEach(object => {
+        drawSkill3(object, skill3);
+    });
+    state.skill2.forEach(object => {
+        drawSkill2(object, skill2);
+    });
+
 
     /*
      * Players drawing
@@ -158,7 +182,6 @@ function paintGame(state) {
 
 function drawPlayer(playerState, playerImage) {
     player = playerState;
-
     frameTime += 0.15;
     frameTime = frameTime % 15;
     thisFrame = Math.round(frameTime / 15);
@@ -166,22 +189,18 @@ function drawPlayer(playerState, playerImage) {
 }
 
 function drawSkill1(position, image) {
-    frameTime2 += 1.45;
     frameTime2 = frameTime2 % 51;
     thisFrame2 = Math.round(frameTime2 / 15);
     ctx.drawImage(image, 512 * thisFrame2, 0, 512, 512, position.x - 256, position.y - 256, 512, 512);
 }
 
 function drawSkill2(position, image) {
-    frameTime3 += 2.15;
     frameTime3 = frameTime3 % 51;
     thisFrame3 = Math.round(frameTime3 / 15);
     ctx.drawImage(image, 512 * thisFrame3, 0, 512, 512, position.x - 256 + 10, position.y - 256 + 208, 512, 512);
 }
 
 function drawSkill3(position, image) {
-    //ctx.drawImage(image, position.x - 128, position.y - 128, 256, 256);
-    frameTime4 += 2.15;
     frameTime4 = frameTime4 % 51;
     thisFrame4 = Math.round(frameTime4 / 15);
     ctx.drawImage(image, 256 * thisFrame4, 0, 256, 256, position.x - 128, position.y - 128, 256, 256);
@@ -207,11 +226,11 @@ function handleGameState(gameState) {
     /*
      * When both players are ready change the waiting screen to Background screen 
      */
-    if (gameActive){
+    if (gameActive) {
         gameScreen.style.background = canvasBackground;
     }
     if (!gameActive) {
-        return;      
+        return;
     }
     gameState = JSON.parse(gameState);
     requestAnimationFrame(() => paintGame(gameState))

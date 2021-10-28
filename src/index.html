@@ -25,8 +25,23 @@
         </div>
         <button type="submit" class="btn" id="joinGameButton">Join Game</button>
     </div>
-    <button id="exitButton" class="exitButton">exit</button>
-    <h1 class="header2"> Your game code is: <span id="gameCodeDisplay"></span></h1>
+    <button id="exitButton" class="exitButton">Exit</button>
+    <button id="instructionsButton" class="instructionsButton"> Instructions </button>
+    <h1 class="header2" id="header2"> Your game code is: <span id="gameCodeDisplay"></span></h1>
+    <div id="instructionsDiv">
+        <h1 class="instructionsHeader"> Instructions: </h1>
+        <ul class="instructionsList">
+            <li> To move use WASD buttons or arrow keys </li>
+        </br>
+            <li> First skill (void hole): press 1 button </li>
+        </br>
+            <li> Second skill (fire beam): press 2 button</li>
+        </br>
+            <li> Third skill (energy prison): press 3 button</li>
+        </br>
+            <li> Send game code to you friend and wait for him to join!</li>
+        </ul>
+    </div>
 
     <canvas id="mainSection">
     </canvas>
