@@ -376,6 +376,9 @@ function getUpdatedHp(keyCode) {
     if (keyCode === secondSkillHotkey) {
         return secondSkill;
     }
+    if (keyCode === thirdSkillHotkey){
+        return thirdSkill;
+    }
 }
 /*
  * Draw skill on canvas and controll where should it be displayed!

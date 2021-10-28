@@ -4,7 +4,7 @@ const io = require('socket.io')({
     }
 });
 
-const { FRAME_RATE, firstSkill, firstSkillHotkey, secondSkill, thirdSkill } = require('./constants');
+const { FRAME_RATE, firstSkill, firstSkillHotkey, secondSkill, thirdSkill, exhaust } = require('./constants');
 const { gameLoop, getUpdatedVelocity, initGame, getUpdatedHp, imageFlip, getUpdatedSkill1, player1TakingDamage, player2TakingDamage, getUpdatedSkill2, getUpdatedSkill3 } = require('./game');
 const { makeid } = require('./utils');
 
@@ -178,7 +178,7 @@ io.on('connection', client => {
 
         const skill3 = getUpdatedSkill3(keyCode, state[roomName].players[client.number - 1]);
 
-        if (skill3 && (client.number - 1 === 1) && state[roomName].players[1].mana >= secondSkill.mana) {
+        if (skill3 && (client.number - 1 === 1) && state[roomName].players[1].mana >= thirdSkill.mana) {
             state[roomName].skill3.push(skill3);
             setTimeout(function () {
                 if (state[roomName] !== null) {
@@ -191,7 +191,7 @@ io.on('connection', client => {
                 }
             }, thirdSkill.duration);
         }
-        if (skill3 && (client.number - 1 === 0) && state[roomName].players[0].mana >= secondSkill.mana) {
+        if (skill3 && (client.number - 1 === 0) && state[roomName].players[0].mana >= thirdSkill.mana) {
             state[roomName].skill3.push(skill3);
             setTimeout(function () {
                 if (state[roomName] !== null) {
