@@ -50,6 +50,7 @@ const exitButton = document.getElementById('exitButton');
 const instructionsButton = document.getElementById('instructionsButton');
 const yourGameCodeString = document.getElementById('header2');
 const instructionsDiv = document.getElementById('instructionsDiv');
+const border = document.querySelector('.box');
 
 newGameBtn.addEventListener('click', newGame);
 joinGameBtn.addEventListener('click', joinGame);
@@ -94,6 +95,7 @@ function init() {
     gameScreen.style.display = "block";
     instructionsButton.style.display = "none";
     yourGameCodeString.style.display = "block";
+    border.style.display = "block";
 
     canvas = document.getElementById('mainSection');
     ctx = canvas.getContext('2d');
