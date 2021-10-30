@@ -66,7 +66,8 @@ io.on('connection', client => {
 
     function handleKeydown(keyCode) {
         const roomName = clientRooms[client.id];
-
+        /* Below is if made to prevent using spells when the game ends (it's crushing server xd) */
+        if(state[roomName] !== undefined){
         if (!roomName) {
             return;
         }
@@ -205,6 +206,7 @@ io.on('connection', client => {
             }, thirdSkill.duration);
         }
     }
+}
 
     function handleKeyUp(keyCode) {
         const roomName = clientRooms[client.id];

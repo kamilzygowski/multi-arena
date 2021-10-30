@@ -191,7 +191,7 @@ function drawPlayer(playerState, playerImage) {
 function drawSkill1(position, image) {
     frameTime2 = frameTime2 % 51;
     thisFrame2 = Math.round(frameTime2 / 15);
-    ctx.drawImage(image, 512 * thisFrame2, 0, 512, 512, position.x - 256, position.y - 256, 512, 512);
+    ctx.drawImage(image, 320 * thisFrame2, 0, 320, 320, position.x - 160, position.y - 160, 320, 320);
 }
 
 function drawSkill2(position, image) {
