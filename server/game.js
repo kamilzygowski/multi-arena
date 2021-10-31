@@ -448,22 +448,22 @@ function getUpdatedSkill3(keyCode, state) {
                 if (playerState.id === 1 && player2FaceLeft) {
                     castedByPlayer2 = true;
                     playAnimation = false;
-                    return { x: playerState.pos.x - 90, y: playerState.pos.y + 5, radius: 26 };
+                    return { x: playerState.pos.x - 90, y: playerState.pos.y, radius: 48 };
                 }
                 if (playerState.id === 0 && player1FaceLeft) {
                     castedByPlayer1 = true;
                     playAnimation = false;
-                    return { x: playerState.pos.x - 90, y: playerState.pos.y + 5, radius: 26 };
+                    return { x: playerState.pos.x - 90, y: playerState.pos.y, radius: 48 };
                 }
                 if (playerState.id === 1 && !player2FaceLeft) {
                     castedByPlayer2 = true;
                     playAnimation = false;
-                    return { x: playerState.pos.x + 90, y: playerState.pos.y + 5, radius: 26 };
+                    return { x: playerState.pos.x + 90, y: playerState.pos.y, radius: 48 };
                 }
                 if (playerState.id === 0 && !player1FaceLeft) {
                     castedByPlayer1 = true;
                     playAnimation = false;
-                    return { x: playerState.pos.x + 90, y: playerState.pos.y + 5, radius: 26 };
+                    return { x: playerState.pos.x + 90, y: playerState.pos.y, radius: 48 };
                 }
             }
 }
