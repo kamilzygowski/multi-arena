@@ -34,7 +34,7 @@ function initGame() {
 }
 
 
-function collision(object1, object2, colliderObject) {
+function collisionPlayerAndPlayer(object1, object2, colliderObject) {
     var dx = object1.pos.x - object2.pos.x;
     var dy = object1.pos.y - object2.pos.y;
     var distance = Math.sqrt(dx * dx + dy * dy);
@@ -45,7 +45,7 @@ function collision(object1, object2, colliderObject) {
     }
 }
 
-function collision2(object1, object2, colliderObject) {
+function collisionPlayerAndObject(object1, object2, colliderObject) {
     var dx = object1.pos.x - object2.x;
     var dy = object1.pos.y - object2.y;
     var distance = Math.sqrt(dx * dx + dy * dy);
@@ -93,6 +93,21 @@ function collision2(object1, object2, colliderObject) {
     return;
 }
 
+function collisionCircleAndRectangle(circle, rectangle, colliderObject){
+    var distX = Math.abs(circle.pos.x - rectangle.x - rectangle.width/2);
+    var distY = Math.abs(circle.pos.y - rectangle.y - rectangle.height/2);
+
+    if (distX > (rectangle.width/2 + circle.radius)) return false;
+    if (distY > (rectangle.height/2 + circle.radius)) return false;
+
+    if (distX <= (rectangle.width/2)) return true;
+    if (distY <= (rectangle.height/2)) return true;
+    
+    var dx = distX - rectangle.width/2;
+    var dy = distY - rectangle.height/2;
+    return (dx * dx + dy * dy <= (circle.radius*circle.radius));
+}
+
 /*
  * These two functions below are made to send to server changed vars, which are updated every frame, those vars determine if player should or shouldn't get hit
  */
@@ -132,6 +147,8 @@ function createGameState() {
             id: 0,
             hp: 100,
             mana: 200,
+            width: 128,
+            height: 96,
             pos: {
                 x: 620,
                 y: 460
@@ -146,6 +163,8 @@ function createGameState() {
             id: 1,
             hp: 100,
             mana: 200,
+            width: 128,
+            height: 96,
             pos: {
                 x: 1110,
                 y: 460
@@ -181,14 +200,19 @@ function gameLoop(state) {
     const skill2 = state.skill2;
     const skill3 = state.skill3;
 
-    collision(playerOne, playerTwo, 'playersCollision');
+    /* Template of new collision
+    if(collisionCircleAndRectangle(playerOne, playerTwo)){
+
+    }*/
+
+    collisionPlayerAndPlayer(playerOne, playerTwo, 'playersCollision');
     /* Skill 1 */
     skill1.forEach(object => {
         if (playerTwo.pos.x === object.x) {
-            collisionFirst = collision2(playerOne, object, 'Skill1Player1');
+            collisionFirst = collisionPlayerAndObject(playerOne, object, 'Skill1Player1');
         }
         if (playerOne.pos.x === object.x) {
-            collisionSecond = collision2(playerTwo, object, 'Skill1Player2');
+            collisionSecond = collisionPlayerAndObject(playerTwo, object, 'Skill1Player2');
         }
     });
 
@@ -196,17 +220,17 @@ function gameLoop(state) {
     /* Skill 2 */
     skill2.forEach(object => {
         if (playerTwo.pos.x + 274 === object.x || playerTwo.pos.x - 270 === object.x) {
-            collisionFirst = collision2(playerOne, object, 'Skill2Player1');
+            collisionFirst = collisionPlayerAndObject(playerOne, object, 'Skill2Player1');
         }
         if (playerOne.pos.x + 274 === object.x || playerOne.pos.x - 270 === object.x) {
-            collisionSecond = collision2(playerTwo, object, 'Skill2Player2');
+            collisionSecond = collisionPlayerAndObject(playerTwo, object, 'Skill2Player2');
         }
     });
     /* Skill 3 */
 
     skill3.forEach(object => {
-        collisionSecond = collision2(playerTwo, object, 'Skill3Player2');
-        collisionFirst = collision2(playerOne, object, 'Skill3Player1');
+        collisionSecond = collisionPlayerAndObject(playerTwo, object, 'Skill3Player2');
+        collisionFirst = collisionPlayerAndObject(playerOne, object, 'Skill3Player1');
     });
 
     player1TakingDamage(1);
@@ -421,22 +445,22 @@ function getUpdatedSkill2(keyCode, state) {
                 if (playerState.id === 1 && player2FaceLeft) {
                     castedByPlayer2 = true;
                     playAnimation = false;
-                    return { x: playerState.pos.x - 270, y: playerState.pos.y, radius: 84 };
+                    return { x: playerState.pos.x - 270, y: playerState.pos.y, radius: 94 };
                 }
                 if (playerState.id === 0 && player1FaceLeft) {
                     castedByPlayer1 = true;
                     playAnimation = false;
-                    return { x: playerState.pos.x - 270, y: playerState.pos.y, radius: 84 };
+                    return { x: playerState.pos.x - 270, y: playerState.pos.y, radius: 94 };
                 }
                 if (playerState.id === 1 && !player2FaceLeft) {
                     castedByPlayer2 = true;
                     playAnimation = false;
-                    return { x: playerState.pos.x + 274, y: playerState.pos.y, radius: 84 };
+                    return { x: playerState.pos.x + 274, y: playerState.pos.y, radius: 94 };
                 }
                 if (playerState.id === 0 && !player1FaceLeft) {
                     castedByPlayer1 = true;
                     playAnimation = false;
-                    return { x: playerState.pos.x + 274, y: playerState.pos.y, radius: 84 };
+                    return { x: playerState.pos.x + 274, y: playerState.pos.y, radius: 94 };
                 }
             }
         
@@ -466,8 +490,4 @@ function getUpdatedSkill3(keyCode, state) {
                     return { x: playerState.pos.x + 90, y: playerState.pos.y, radius: 48 };
                 }
             }
-}
-
-function resetVelocity(keyCode) {
-
 }

@@ -26,6 +26,7 @@ const secondSkill={
     mana: 25,
 }
 const thirdSkill ={
+    damage:0,
     mana:30,
     duration: 3750, // in miliseconds
 }
