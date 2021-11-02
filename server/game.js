@@ -1,8 +1,11 @@
-const { gameHeight, gameWidth, playerSpeed, firstSkill, manaRegen, hpRegen, firstSkillHotkey, secondSkillHotkey, secondSkill, thirdSkillHotkey, thirdSkill, exhaust } = require('./constants');
+const { gameHeight, gameWidth, playerSpeed, firstSkill, manaRegen, hpRegen, firstSkillHotkey, secondSkillHotkey, secondSkill, thirdSkillHotkey, thirdSkill, exhaust
+,fourthSkill, fourthSkillHotkey } = require('./constants');
 
 let canIMove = true;
 let canMoveRight = true;
 let canMoveLeft = true;
+let canMoveUp = true;
+let canMoveDown = true;
 let castedByPlayer1 = false;
 let castedByPlayer2 = false;
 let player1GotShot = false;
@@ -26,6 +29,7 @@ module.exports = {
     player2TakingDamage,
     getUpdatedSkill2,
     getUpdatedSkill3,
+    getUpdatedSkill4,
 }
 
 function initGame() {
@@ -181,6 +185,7 @@ function createGameState() {
         skill1: [],
         skill2: [],
         skill3: [],
+        skill4: [],
     };
 }
 
@@ -199,11 +204,8 @@ function gameLoop(state) {
     const skill1 = state.skill1;
     const skill2 = state.skill2;
     const skill3 = state.skill3;
+    const skill4 = state.skill4;
 
-    /* Template of new collision
-    if(collisionCircleAndRectangle(playerOne, playerTwo)){
-
-    }*/
 
     collisionPlayerAndPlayer(playerOne, playerTwo, 'playersCollision');
     /* Skill 1 */
@@ -231,6 +233,19 @@ function gameLoop(state) {
     skill3.forEach(object => {
         collisionSecond = collisionPlayerAndObject(playerTwo, object, 'Skill3Player2');
         collisionFirst = collisionPlayerAndObject(playerOne, object, 'Skill3Player1');
+    });
+    /* Skill 4 */
+    skill4.forEach(object => {
+        if (collisionCircleAndRectangle(playerTwo, object,'Skill4Player2')) {
+            if(playerTwo.pos.x > object.x && playerTwo.pos.x < object.x+object.width && playerTwo.pos.y < object.y + 1){
+                canPlayer2Move = false
+            } 
+            return canPlayer2Move = true;
+
+        }
+        if (collisionCircleAndRectangle(playerOne, object, 'Skill4Player1')) {
+            console.log('yike');
+        }
     });
 
     player1TakingDamage(1);
@@ -414,6 +429,11 @@ function getUpdatedHp(keyCode) {
         playAnimation = true;
         return thirdSkill;
     }
+    if (keyCode === fourthSkillHotkey){
+        playerExhaust = true;
+        playAnimation = true;
+        return fourthSkill;
+    }
 }
 }
 /*
@@ -490,4 +510,32 @@ function getUpdatedSkill3(keyCode, state) {
                     return { x: playerState.pos.x + 90, y: playerState.pos.y, radius: 48 };
                 }
             }
+}
+
+function getUpdatedSkill4(keyCode, state) {
+    let playerState = state;
+
+            if (keyCode === fourthSkillHotkey && playAnimation) {
+                if (playerState.id === 1 && player2FaceLeft) {
+                    castedByPlayer2 = true;
+                    playAnimation = false;
+                    return { x: playerState.pos.x - 96, y: playerState.pos.y, radius: 94, width:56, height:192 };
+                }
+                if (playerState.id === 0 && player1FaceLeft) {
+                    castedByPlayer1 = true;
+                    playAnimation = false;
+                    return { x: playerState.pos.x - 96 , y: playerState.pos.y, radius: 94, width:56, height:192 };
+                }
+                if (playerState.id === 1 && !player2FaceLeft) {
+                    castedByPlayer2 = true;
+                    playAnimation = false;
+                    return { x: playerState.pos.x + 96 , y: playerState.pos.y, radius: 94, width:56, height:192 };
+                }
+                if (playerState.id === 0 && !player1FaceLeft) {
+                    castedByPlayer1 = true;
+                    playAnimation = false;
+                    return { x: playerState.pos.x+ 96 , y: playerState.pos.y, radius: 94, width:56, height:192 };
+                }
+            }
+        
 }

@@ -4,6 +4,8 @@ const skill2 = new Image();
 skill2.src = './images/skill2Anim.png';
 const skill3 = new Image();
 skill3.src = './images/skill3.png';
+const skill4 = new Image();
+skill4.src = './images/skill4.png';
 
 /* Frame and looping vars */
 let thisFrame = 0;
@@ -27,6 +29,7 @@ const exhaust = 1000;
 const skill1Hotkey = 49;
 const skill2Hotkey = 50;
 const skill3Hotkey = 51;
+const skill4Hotkey = 52;
 
 
 const socket = io('http://localhost:3000');
@@ -173,6 +176,9 @@ function paintGame(state) {
     state.skill2.forEach(object => {
         drawSkill2(object, skill2);
     });
+    state.skill4.forEach(object => {
+        drawSkill4(object, skill4);
+    });
 
 
     /*
@@ -208,6 +214,11 @@ function drawSkill3(position, image) {
     frameTime4 = frameTime4 % 51;
     thisFrame4 = Math.round(frameTime4 / 15);
     ctx.drawImage(image, 256 * thisFrame4, 0, 256, 256, position.x - 128, position.y - 64, 256, 256);
+
+}
+
+function drawSkill4(position, image) {
+    ctx.drawImage(image, position.x - 28, position.y - 96, 56, 192);
 
 }
 

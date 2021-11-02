@@ -30,9 +30,15 @@ const thirdSkill ={
     mana:30,
     duration: 3750, // in miliseconds
 }
+const fourthSkill ={
+    damage:0,
+    mana:30,
+    duration: 6500,
+}
 const firstSkillHotkey = 49;
 const secondSkillHotkey = 50;
 const thirdSkillHotkey = 51;
+const fourthSkillHotkey = 52;
 
 
 module.exports = {
@@ -49,4 +55,6 @@ module.exports = {
     thirdSkillHotkey,
     thirdSkill,
     exhaust,
+    fourthSkill,
+    fourthSkillHotkey,
 }
