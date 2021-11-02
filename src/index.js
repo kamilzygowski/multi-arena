@@ -218,7 +218,7 @@ function drawSkill3(position, image) {
 }
 
 function drawSkill4(position, image) {
-    ctx.drawImage(image, position.x - 28, position.y - 96, 56, 192);
+    ctx.drawImage(image, position.x , position.y , 56, 192);
 
 }
 

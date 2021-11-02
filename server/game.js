@@ -1,11 +1,15 @@
 const { gameHeight, gameWidth, playerSpeed, firstSkill, manaRegen, hpRegen, firstSkillHotkey, secondSkillHotkey, secondSkill, thirdSkillHotkey, thirdSkill, exhaust
-,fourthSkill, fourthSkillHotkey } = require('./constants');
+    , fourthSkill, fourthSkillHotkey } = require('./constants');
 
 let canIMove = true;
-let canMoveRight = true;
-let canMoveLeft = true;
-let canMoveUp = true;
-let canMoveDown = true;
+let player1MoveRight = true;
+let player1MoveLeft = true;
+let player1MoveUp = true;
+let player1MoveDown = true;
+let player2MoveRight = true;
+let player2MoveLeft = true;
+let player2MoveUp = true;
+let player2MoveDown = true;
 let castedByPlayer1 = false;
 let castedByPlayer2 = false;
 let player1GotShot = false;
@@ -83,7 +87,7 @@ function collisionPlayerAndObject(object1, object2, colliderObject) {
             setTimeout(() => {
                 canPlayer1Move = true;
             }, thirdSkill.duration / 3);
-            canMoveRight = false;
+            //canMoveRight = false;
         }
         if (colliderObject === 'Skill3Player2') {
             canPlayer2Move = false;  //VERY GOOD EXAMPLE OF STUNN, it will be needed later
@@ -91,25 +95,25 @@ function collisionPlayerAndObject(object1, object2, colliderObject) {
             setTimeout(() => {
                 canPlayer2Move = true;
             }, thirdSkill.duration / 3);
-            canMoveRight = false;
+            //canMoveRight = false;
         }
     }
     return;
 }
 
-function collisionCircleAndRectangle(circle, rectangle, colliderObject){
-    var distX = Math.abs(circle.pos.x - rectangle.x - rectangle.width/2);
-    var distY = Math.abs(circle.pos.y - rectangle.y - rectangle.height/2);
+function collisionCircleAndRectangle(circle, rectangle, colliderObject) {
+    var distX = Math.abs(circle.pos.x - rectangle.x - rectangle.width / 2);
+    var distY = Math.abs(circle.pos.y - rectangle.y - rectangle.height / 2);
 
-    if (distX > (rectangle.width/2 + circle.radius)) return false;
-    if (distY > (rectangle.height/2 + circle.radius)) return false;
+    if (distX > (rectangle.width / 2 + circle.radius)) return false;
+    if (distY > (rectangle.height / 2 + circle.radius)) return false;
 
-    if (distX <= (rectangle.width/2)) return true;
-    if (distY <= (rectangle.height/2)) return true;
-    
-    var dx = distX - rectangle.width/2;
-    var dy = distY - rectangle.height/2;
-    return (dx * dx + dy * dy <= (circle.radius*circle.radius));
+    if (distX <= (rectangle.width / 2)) return true;
+    if (distY <= (rectangle.height / 2)) return true;
+
+    var dx = distX - rectangle.width / 2;
+    var dy = distY - rectangle.height / 2;
+    return (dx * dx + dy * dy <= (circle.radius * circle.radius));
 }
 
 /*
@@ -154,8 +158,8 @@ function createGameState() {
             width: 128,
             height: 96,
             pos: {
-                x: 620,
-                y: 460
+                x: 300,
+                y: 450
             },
             vel: {
                 x: 0,
@@ -170,8 +174,8 @@ function createGameState() {
             width: 128,
             height: 96,
             pos: {
-                x: 1110,
-                y: 460
+                x: 1200,
+                y: 450
             },
             vel: {
                 x: 0,
@@ -206,6 +210,16 @@ function gameLoop(state) {
     const skill3 = state.skill3;
     const skill4 = state.skill4;
 
+    /* Every frame refresh both players movement */ 
+    player1MoveDown = true;
+    player1MoveUp = true;
+    player1MoveLeft = true;
+    player1MoveRight = true;
+    player2MoveDown = true;
+    player2MoveUp = true;
+    player2MoveLeft = true;
+    player2MoveRight = true;
+
 
     collisionPlayerAndPlayer(playerOne, playerTwo, 'playersCollision');
     /* Skill 1 */
@@ -236,15 +250,53 @@ function gameLoop(state) {
     });
     /* Skill 4 */
     skill4.forEach(object => {
-        if (collisionCircleAndRectangle(playerTwo, object,'Skill4Player2')) {
-            if(playerTwo.pos.x > object.x && playerTwo.pos.x < object.x+object.width && playerTwo.pos.y < object.y + 1){
-                canPlayer2Move = false
-            } 
-            return canPlayer2Move = true;
-
+        console.log(playerTwo.pos.y, object.y + object.height);
+        if (collisionCircleAndRectangle(playerTwo, object, 'Skill4Player2')) {
+            /* Player cant go down when he collides with north wall */
+            if (playerTwo.pos.y === object.y) {
+                player2MoveDown = false;
+                console.log('yike');
+            }
+            /* Player cant go right when he collided with west wall */
+            else if (playerTwo.pos.x  === object.x) {
+                player2MoveRight = false;
+            }
+            /* Player cant go left when he collided with east wall */
+            else if (playerTwo.pos.x  === object.x + object.width) {
+                player2MoveLeft = false;
+            }
+            /* Player cant go up when he collided with south wall */
+            else if (playerTwo.pos.y === object.y + object.height) {
+                player2MoveUp = false;
+            }
+        } else {
+            player2MoveDown = true;
+            player2MoveUp = true;
+            player2MoveLeft = true;
+            player2MoveRight = true;
         }
         if (collisionCircleAndRectangle(playerOne, object, 'Skill4Player1')) {
-            console.log('yike');
+            if (playerOne.pos.y === object.y) {
+                player1MoveDown = false;
+                console.log('yike');
+            }
+            /* Player cant go right when he collided with west wall */
+            else if (playerOne.pos.x  === object.x) {
+                player1MoveRight = false;
+            }
+            /* Player cant go left when he collided with east wall */
+            else if (playerOne.pos.x  === object.x + object.width) {
+                player1MoveLeft = false;
+            }
+            /* Player cant go up when he collided with south wall */
+            else if (playerOne.pos.y === object.y + object.height) {
+                player1MoveUp = false;
+            }
+        } else {
+            player1MoveDown = true;
+            player1MoveUp = true;
+            player1MoveLeft = true;
+            player1MoveRight = true;
         }
     });
 
@@ -256,49 +308,31 @@ function gameLoop(state) {
      This block is controling where is the edge of the screen and makes player not corssing those edges
      *
      **/
+    /* Player 1 movement */
     if (canPlayer1Move) {
-        /*var dx = playerOne.pos.x - skill3.x;
-        var dy = playerOne.pos.y - skill3.y;
-        var dx1 = playerTwo.pos.x - skill3.x;
-        var dy1 = playerTwo.pos.y - skill3.y;
-        var distance = Math.sqrt(dx * dx + dy * dy);
-        var distance1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);*/
-        //console.log(dx, dy);
-
         if ((playerOne.pos.x < gameWidth && playerOne.pos.x > 0) || (playerOne.pos.x >= gameWidth && playerOne.vel.x < 0) || (playerOne.pos.x <= 0 && playerOne.vel.x > 0)) {
-            /* The block of code which makes player nr 1 not able to get through the wall (skill3) in x axis */
-            /*if( !(distance<= playerOne.radius + skill3.radius && dx <= 0) && playerOne.vel.x > 0 ){
+                if (playerOne.vel.x > 0 && player1MoveRight || playerOne.vel.x < 0 && player1MoveLeft) {
             playerOne.pos.x += playerOne.vel.x;
-            } else if (!(distance<= playerOne.radius + skill3.radius && dx >= 0) && playerOne.vel.x < 0 ){*/
-            playerOne.pos.x += playerOne.vel.x;
-            //}
+                }
         }
         if ((playerOne.pos.y < gameHeight && playerOne.pos.y > 0) || (playerOne.pos.y >= gameHeight && playerOne.vel.y < 0) || (playerOne.pos.y <= 0 && playerOne.vel.y > 0)) {
-            /* The block of code which makes player nr 1 not able to get through the wall (skill3) in y axis */
-            /*if( !(distance<= playerOne.radius + skill3.radius && dy <= 0) && playerOne.vel.y > 0){
-                playerOne.pos.y += playerOne.vel.y;
-                } else if (!(distance<= playerOne.radius + skill3.radius && dy >= 0) && playerOne.vel.y < 0){*/
+                    if (playerOne.vel.y > 0 && player1MoveDown || playerOne.vel.y < 0 && player1MoveUp) {
             playerOne.pos.y += playerOne.vel.y;
-            //}
+                    }
         }
     }
+    /* Player 2 movement */
     if (canPlayer2Move) {
 
         if ((playerTwo.pos.x < gameWidth && playerTwo.pos.x > 0) || (playerTwo.pos.x >= gameWidth && playerTwo.vel.x < 0) || (playerTwo.pos.x <= 0 && playerTwo.vel.x > 0)) {
-            /* The block of code which makes player nr 2 not able to get through the wall (skill3) in x axis */
-            /*if( !(distance1<= playerTwo.radius + skill3.radius && dx <= 0) && playerTwo.vel.x > 0){
+            if (playerTwo.vel.x > 0 && player2MoveRight || playerTwo.vel.x < 0 && player2MoveLeft) {
                 playerTwo.pos.x += playerTwo.vel.x;
-                } else if (!(distance1<= playerTwo.radius + skill3.radius && dx >= 0) && playerTwo.vel.x < 0){*/
-            playerTwo.pos.x += playerTwo.vel.x;
-            //}
+            }
         }
         if (((playerTwo.pos.y < gameHeight && playerTwo.pos.y > 0) || (playerTwo.pos.y >= gameHeight && playerTwo.vel.y < 0) || (playerTwo.pos.y <= 0 && playerTwo.vel.y > 0))) {
-            /* The block of code which makes player nr 2 not able to get through the wall (skill3) in x axis */
-            /*if( !(distance1<= playerTwo.radius + skill3.radius && dy <= 0) && playerTwo.vel.y > 0){
+            if (playerTwo.vel.y > 0 && player2MoveDown || playerTwo.vel.y < 0 && player2MoveUp) {
                 playerTwo.pos.y += playerTwo.vel.y;
-                } else if (!(distance1<= playerTwo.radius + skill3.radius && dy >= 0) && playerTwo.vel.y < 0){*/
-            playerTwo.pos.y += playerTwo.vel.y;
-            //}
+            }
         }
 
     }    /*
@@ -349,34 +383,34 @@ function healingPotions(state) {
 function getUpdatedVelocity(keyCode, state) {
 
     if (state !== null) {
-       
-            if (keyCode === 37){// left
-                return { x: -playerSpeed, y: state.y };
-            }
-            else if (keyCode === 38){// down
-                return { x: state.x, y: -playerSpeed };
-            }
-            else if (keyCode === 39){// right
-                return { x: playerSpeed, y: state.y };
-            }
-            else if (keyCode === 40){// up
-                return { x: state.x, y: playerSpeed };
-            }
-            else if (keyCode === 65){// left
-                return { x: -playerSpeed, y: state.y };
-            }
-            else if (keyCode === 87) {// down
-                return { x: state.x, y: -playerSpeed };
-            }
-            else if (keyCode === 68){// right
-                return { x: playerSpeed, y: state.y };
-            }
-            else if (keyCode === 83){// up
-                return { x: state.x, y: playerSpeed };
-            } else {
-                return { x: 0, y: 0 };
-            }
-        
+
+        if (keyCode === 37) {// left
+            return { x: -playerSpeed, y: state.y };
+        }
+        else if (keyCode === 38) {// down
+            return { x: state.x, y: -playerSpeed };
+        }
+        else if (keyCode === 39) {// right
+            return { x: playerSpeed, y: state.y };
+        }
+        else if (keyCode === 40) {// up
+            return { x: state.x, y: playerSpeed };
+        }
+        else if (keyCode === 65) {// left
+            return { x: -playerSpeed, y: state.y };
+        }
+        else if (keyCode === 87) {// down
+            return { x: state.x, y: -playerSpeed };
+        }
+        else if (keyCode === 68) {// right
+            return { x: playerSpeed, y: state.y };
+        }
+        else if (keyCode === 83) {// up
+            return { x: state.x, y: playerSpeed };
+        } else {
+            return { x: 0, y: 0 };
+        }
+
     }
 }
 
@@ -410,31 +444,31 @@ function imageFlip(keyCode, state) {
  * Gives server informations about skill if it's keyCode is pressed
  */
 function getUpdatedHp(keyCode) {
-    if(!playerExhaust){
+    if (!playerExhaust) {
         setTimeout(() => {
             playerExhaust = false;
         }, exhaust + 500);
-    if ((keyCode === firstSkillHotkey)) { // Skill 1
-        playerExhaust = true;
-        playAnimation = true;
-        return firstSkill;
+        if ((keyCode === firstSkillHotkey)) { // Skill 1
+            playerExhaust = true;
+            playAnimation = true;
+            return firstSkill;
+        }
+        if (keyCode === secondSkillHotkey) {
+            playerExhaust = true;
+            playAnimation = true;
+            return secondSkill;
+        }
+        if (keyCode === thirdSkillHotkey) {
+            playerExhaust = true;
+            playAnimation = true;
+            return thirdSkill;
+        }
+        if (keyCode === fourthSkillHotkey) {
+            playerExhaust = true;
+            playAnimation = true;
+            return fourthSkill;
+        }
     }
-    if (keyCode === secondSkillHotkey) {
-        playerExhaust = true;
-        playAnimation = true;
-        return secondSkill;
-    }
-    if (keyCode === thirdSkillHotkey){
-        playerExhaust = true;
-        playAnimation = true;
-        return thirdSkill;
-    }
-    if (keyCode === fourthSkillHotkey){
-        playerExhaust = true;
-        playAnimation = true;
-        return fourthSkill;
-    }
-}
 }
 /*
  * Draw skill on canvas and controll where should it be displayed!
@@ -442,8 +476,8 @@ function getUpdatedHp(keyCode) {
 function getUpdatedSkill1(keyCode, state) {
     let playerState = state;
 
-                    
-    if (keyCode === firstSkillHotkey  && playAnimation) {
+
+    if (keyCode === firstSkillHotkey && playAnimation) {
         if (playerState.id === 1) {
             castedByPlayer2 = true;
             playAnimation = false;
@@ -461,81 +495,81 @@ function getUpdatedSkill1(keyCode, state) {
 function getUpdatedSkill2(keyCode, state) {
     let playerState = state;
 
-            if (keyCode === secondSkillHotkey && playAnimation) {
-                if (playerState.id === 1 && player2FaceLeft) {
-                    castedByPlayer2 = true;
-                    playAnimation = false;
-                    return { x: playerState.pos.x - 270, y: playerState.pos.y, radius: 94 };
-                }
-                if (playerState.id === 0 && player1FaceLeft) {
-                    castedByPlayer1 = true;
-                    playAnimation = false;
-                    return { x: playerState.pos.x - 270, y: playerState.pos.y, radius: 94 };
-                }
-                if (playerState.id === 1 && !player2FaceLeft) {
-                    castedByPlayer2 = true;
-                    playAnimation = false;
-                    return { x: playerState.pos.x + 274, y: playerState.pos.y, radius: 94 };
-                }
-                if (playerState.id === 0 && !player1FaceLeft) {
-                    castedByPlayer1 = true;
-                    playAnimation = false;
-                    return { x: playerState.pos.x + 274, y: playerState.pos.y, radius: 94 };
-                }
-            }
-        
+    if (keyCode === secondSkillHotkey && playAnimation) {
+        if (playerState.id === 1 && player2FaceLeft) {
+            castedByPlayer2 = true;
+            playAnimation = false;
+            return { x: playerState.pos.x - 270, y: playerState.pos.y, radius: 94 };
+        }
+        if (playerState.id === 0 && player1FaceLeft) {
+            castedByPlayer1 = true;
+            playAnimation = false;
+            return { x: playerState.pos.x - 270, y: playerState.pos.y, radius: 94 };
+        }
+        if (playerState.id === 1 && !player2FaceLeft) {
+            castedByPlayer2 = true;
+            playAnimation = false;
+            return { x: playerState.pos.x + 274, y: playerState.pos.y, radius: 94 };
+        }
+        if (playerState.id === 0 && !player1FaceLeft) {
+            castedByPlayer1 = true;
+            playAnimation = false;
+            return { x: playerState.pos.x + 274, y: playerState.pos.y, radius: 94 };
+        }
+    }
+
 }
 
 function getUpdatedSkill3(keyCode, state) {
     const playerState = state;
-            if (keyCode === thirdSkillHotkey  && playAnimation) {
-                if (playerState.id === 1 && player2FaceLeft) {
-                    castedByPlayer2 = true;
-                    playAnimation = false;
-                    return { x: playerState.pos.x - 90, y: playerState.pos.y, radius: 48 };
-                }
-                if (playerState.id === 0 && player1FaceLeft) {
-                    castedByPlayer1 = true;
-                    playAnimation = false;
-                    return { x: playerState.pos.x - 90, y: playerState.pos.y, radius: 48 };
-                }
-                if (playerState.id === 1 && !player2FaceLeft) {
-                    castedByPlayer2 = true;
-                    playAnimation = false;
-                    return { x: playerState.pos.x + 90, y: playerState.pos.y, radius: 48 };
-                }
-                if (playerState.id === 0 && !player1FaceLeft) {
-                    castedByPlayer1 = true;
-                    playAnimation = false;
-                    return { x: playerState.pos.x + 90, y: playerState.pos.y, radius: 48 };
-                }
-            }
+    if (keyCode === thirdSkillHotkey && playAnimation) {
+        if (playerState.id === 1 && player2FaceLeft) {
+            castedByPlayer2 = true;
+            playAnimation = false;
+            return { x: playerState.pos.x - 90, y: playerState.pos.y, radius: 48 };
+        }
+        if (playerState.id === 0 && player1FaceLeft) {
+            castedByPlayer1 = true;
+            playAnimation = false;
+            return { x: playerState.pos.x - 90, y: playerState.pos.y, radius: 48 };
+        }
+        if (playerState.id === 1 && !player2FaceLeft) {
+            castedByPlayer2 = true;
+            playAnimation = false;
+            return { x: playerState.pos.x + 90, y: playerState.pos.y, radius: 48 };
+        }
+        if (playerState.id === 0 && !player1FaceLeft) {
+            castedByPlayer1 = true;
+            playAnimation = false;
+            return { x: playerState.pos.x + 90, y: playerState.pos.y, radius: 48 };
+        }
+    }
 }
 
 function getUpdatedSkill4(keyCode, state) {
     let playerState = state;
 
-            if (keyCode === fourthSkillHotkey && playAnimation) {
-                if (playerState.id === 1 && player2FaceLeft) {
-                    castedByPlayer2 = true;
-                    playAnimation = false;
-                    return { x: playerState.pos.x - 96, y: playerState.pos.y, radius: 94, width:56, height:192 };
-                }
-                if (playerState.id === 0 && player1FaceLeft) {
-                    castedByPlayer1 = true;
-                    playAnimation = false;
-                    return { x: playerState.pos.x - 96 , y: playerState.pos.y, radius: 94, width:56, height:192 };
-                }
-                if (playerState.id === 1 && !player2FaceLeft) {
-                    castedByPlayer2 = true;
-                    playAnimation = false;
-                    return { x: playerState.pos.x + 96 , y: playerState.pos.y, radius: 94, width:56, height:192 };
-                }
-                if (playerState.id === 0 && !player1FaceLeft) {
-                    castedByPlayer1 = true;
-                    playAnimation = false;
-                    return { x: playerState.pos.x+ 96 , y: playerState.pos.y, radius: 94, width:56, height:192 };
-                }
-            }
-        
+    if (keyCode === fourthSkillHotkey && playAnimation) {
+        if (playerState.id === 1 && player2FaceLeft) {
+            castedByPlayer2 = true;
+            playAnimation = false;
+            return { x: playerState.pos.x - 75, y: playerState.pos.y - 60, radius: 94, width: 60, height: 195 };
+        }
+        if (playerState.id === 0 && player1FaceLeft) {
+            castedByPlayer1 = true;
+            playAnimation = false;
+            return { x: playerState.pos.x - 75, y: playerState.pos.y - 60, radius: 94, width: 60, height: 195 };
+        }
+        if (playerState.id === 1 && !player2FaceLeft) {
+            castedByPlayer2 = true;
+            playAnimation = false;
+            return { x: playerState.pos.x + 75, y: playerState.pos.y - 60, radius: 94, width: 60, height: 195 };
+        }
+        if (playerState.id === 0 && !player1FaceLeft) {
+            castedByPlayer1 = true;
+            playAnimation = false;
+            return { x: playerState.pos.x + 75, y: playerState.pos.y - 60, radius: 94, width: 60, height: 195 };
+        }
+    }
+
 }

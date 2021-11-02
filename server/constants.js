@@ -9,7 +9,7 @@ const gameWidth = 1360;
 /*
  * Player options and constants
  */
-const playerSpeed = 16;
+const playerSpeed = 15;
 const manaRegen = 0.05;
 const hpRegen =0.0025;
 const exhaust = 1000;
