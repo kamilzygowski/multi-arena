@@ -56,11 +56,14 @@ const instructionsButton = document.getElementById('instructionsButton');
 const yourGameCodeString = document.getElementById('header2');
 const instructionsDiv = document.getElementById('instructionsDiv');
 const border = document.querySelector('.box');
+const customizeButton = document.getElementById('customizeButton');
+const customizeDiv = document.getElementById('customizeDiv');
 
 newGameBtn.addEventListener('click', newGame);
 joinGameBtn.addEventListener('click', joinGame);
 exitButton.addEventListener('click', exit);
 instructionsButton.addEventListener('click', instructions);
+customizeButton.addEventListener('click', customize);
 
 
 let ctx;
@@ -92,6 +95,15 @@ function instructions() {
     initialScreen.style.display = "none";
     instructionsButton.style.display = "none";
     instructionsDiv.style.display = "flex";
+    customizeButton.style.display = "none";
+}
+
+function customize() {
+    exitButton.style.display = "block";
+    initialScreen.style.display = "none";
+    instructionsButton.style.display = "none";
+    customizeButton.style.display = "none";
+    customizeDiv.style.display = "block";
 }
 
 function init() {
