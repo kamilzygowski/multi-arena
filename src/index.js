@@ -58,12 +58,23 @@ const instructionsDiv = document.getElementById('instructionsDiv');
 const border = document.querySelector('.box');
 const customizeButton = document.getElementById('customizeButton');
 const customizeDiv = document.getElementById('customizeDiv');
+const check = document.getElementById('check');
+const colors = document.querySelectorAll('.color');
+
 
 newGameBtn.addEventListener('click', newGame);
 joinGameBtn.addEventListener('click', joinGame);
 exitButton.addEventListener('click', exit);
 instructionsButton.addEventListener('click', instructions);
 customizeButton.addEventListener('click', customize);
+colors.forEach(color =>{
+    color.addEventListener('click', function(){
+        const playerColor = color.value;
+    })
+});
+
+console.log(window.screen.availHeight);
+console.log(window.screen.availWidth);
 
 
 let ctx;
@@ -117,8 +128,15 @@ function init() {
     canvas = document.getElementById('mainSection');
     ctx = canvas.getContext('2d');
 
+    if (window.screen.availHeight >= 825 && window.screen.availWidth >= 1527){
     canvas.width = 1420;
     canvas.height = 760;
+    } else {
+        canvas.width = 1220;
+        canvas.height = 610;
+    }
+
+    console.log(canvas.width, canvas.height);
 
     document.addEventListener('keydown', keydown);
     document.addEventListener('keyup', keyup);
@@ -237,15 +255,15 @@ function drawSkill4(position, image) {
 function showCharacterStatus(state) {
     ctx.font = '600 36px abaddon';
     ctx.fillStyle = "#ff3f34";
-    ctx.fillRect(1210, 5, state.players[playerNumber - 1].hp * 2, 30);
-    ctx.fillText('Health ', 1110, 30);
+    ctx.fillRect(canvas.width - 210, 5, state.players[playerNumber - 1].hp * 2, 30);
+    ctx.fillText('Health ', canvas.width - 310, 30);
     ctx.fillStyle = "#fff";
-    ctx.fillText(Math.floor(state.players[playerNumber - 1].hp), 1290, 30);
+    ctx.fillText(Math.floor(state.players[playerNumber - 1].hp), canvas.width - 130, 30);
     ctx.fillStyle = "#0fbcf9";
-    ctx.fillRect(1210, 45, state.players[playerNumber - 1].mana, 30);
-    ctx.fillText('Mana ', 1115, 70);
+    ctx.fillRect(canvas.width - 210, 45, state.players[playerNumber - 1].mana, 30);
+    ctx.fillText('Mana ', canvas.width - 305, 70);
     ctx.fillStyle = "#fff";
-    ctx.fillText(Math.floor(state.players[playerNumber - 1].mana), 1290, 70);
+    ctx.fillText(Math.floor(state.players[playerNumber - 1].mana), canvas.width - 130, 70);
 
 
 

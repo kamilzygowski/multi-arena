@@ -32,6 +32,18 @@ html {
    
 }
 
+#check{
+    position: absolute;
+    height: inherit;
+    width: inherit;
+    left: 45%;
+    top:35%;
+    font-size:196px;
+    margin: auto auto;
+    color:#6ab04c;
+    display: none;
+}
+
 #newGameButton {
     margin:0 auto;
     height: 125px;
@@ -129,34 +141,6 @@ html {
     position:absolute;
 }
 
-#instructionsDiv{
-    width:1150px;
-    height: 750px;
-    margin: auto auto;
-    margin-top: 65px;
-    background: linear-gradient(90deg, rgba(131,58,180,1) 6%, rgba(253,29,29,1) 54%, rgba(252,176,69,1) 88%);;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    display: none;
-    border: #000 3px solid;
-    border-radius: 9px;
-}
-
-.instructionsHeader{
-    padding-top:45px;
-    font-size: 72px;
-}
-
-.instructionsList {
-    font-size: 36px;
-    margin-top: 5px;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
 #instructionsButton:hover{
     background: url("../images/button2P2.png");
     background-size: cover;
@@ -249,6 +233,37 @@ html {
     color:#0fbcf9;
 }
 
+/* INSTRUCTIONS SECTION */
+#instructionsDiv{
+    width:1150px;
+    height: 750px;
+    margin: auto auto;
+    margin-top: 65px;
+    background: linear-gradient(90deg, rgba(131,58,180,1) 6%, rgba(253,29,29,1) 54%, rgba(252,176,69,1) 88%);;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    display: none;
+    border: #000 3px solid;
+    border-radius: 9px;
+}
+
+.instructionsHeader{
+    padding-top:45px;
+    font-size: 72px;
+}
+
+.instructionsList {
+    font-size: 36px;
+    margin-top: 5px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+/* CUSTOMIZE SECTION */
 #customizeDiv {
     display: none;
     height: inherit;
@@ -271,57 +286,35 @@ html {
     font-size: 49px;
 }
 
-.color1{
-    background:red;
+.color{
     width: 180px;
     height: 180px;
     display: flex;
     border-radius: 100%;
     align-self: center;
-}
-.color2{
-    width: 180px;
-    height: 180px;
-    display: flex;
-    border-radius: 100%;
-    align-self: center;
-    background:blue;
-
-}
-.color3{
-    width: 180px;
-    height: 180px;
-    display: flex;
-    border-radius: 100%;
-    align-self: center;
-    background:indigo;
-}
-.color4{
-    background:forestgreen;
-    width: 180px;
-    height: 180px;
-    display: flex;
-    border-radius: 100%;
-    align-self: center;
-}
-.color5{
-    background:salmon;
-    width: 180px;
-    height: 180px;
-    display: flex;
-    border-radius: 100%;
-    align-self: center;
-}
-.color6{
-    background:aquamarine;
-    width: 180px;
-    height: 180px;
-    display: flex;
-    border-radius: 100%;
-    align-self: center;
+    border: none;
 }
 
-.color1:hover,.color2:hover,.color3:hover,.color4:hover,.color5:hover,.color6:hover {
+.color:nth-of-type(1){
+    background:#5758BB;
+}
+.color:nth-of-type(2){
+    background:#6F1E51;
+}
+.color:nth-of-type(3){
+    background:#596275;
+}
+.color:nth-of-type(4){
+    background:#f8a5c2;
+}
+.color:nth-of-type(5){
+    background:#0be881;
+}
+.color:nth-of-type(6){
+    background:#e056fd;
+}
+
+.color:hover {
     opacity: 0.65;
 }
 
@@ -434,3 +427,29 @@ html {
       
     }
 }
+
+/* Media for medium-size laptop screens */
+@media only screen and (max-width: 1580px) {
+    #mainSection {
+        display: none;
+        width:1220px;
+        height: 610px;
+        margin: auto auto;
+        border: 3px solid #fff;
+        background:url('../images/waitingScreen.gif');
+        background-size: cover;
+        background-position: center;
+        z-index: 0;
+        background-repeat: no-repeat;
+    }
+
+    #instructionsDiv{
+        width:1050px;
+        height: 610px;
+    }
+
+    .exitButton {
+        right:10px;
+        top:10px;
+    }
+  }
