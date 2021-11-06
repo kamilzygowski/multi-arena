@@ -25,6 +25,7 @@ html {
     background-size: cover;
     background-position: center;
     z-index: 0;
+    background-repeat: no-repeat;
 }
 
 #initialScreen {

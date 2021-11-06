@@ -1,4 +1,4 @@
-const canvasBackground = "url('https://i.postimg.cc/pyNC3nMt/background.png')";
+const canvasBackground = "url('https://i.postimg.cc/L6RSJG8f/background.png')";
 
 const skill2 = new Image();
 skill2.src = './images/skill2Anim.png';
@@ -251,7 +251,7 @@ function handleGameState(gameState) {
      * When both players are ready change the waiting screen to Background screen 
      */
     if (gameActive) {
-        gameScreen.style.background = canvasBackground;
+        gameScreen.style.cssText = 'display: block; background: ' + canvasBackground + ' no-repeat; background-size:cover; background-position:center;';
     }
     if (!gameActive) {
         return;
