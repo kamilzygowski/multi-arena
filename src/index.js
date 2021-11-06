@@ -69,7 +69,11 @@ instructionsButton.addEventListener('click', instructions);
 customizeButton.addEventListener('click', customize);
 colors.forEach(color =>{
     color.addEventListener('click', function(){
-        const playerColor = color.value;
+        const playerColor = color.id;
+        check.style.display = "block";
+        setTimeout(() => {
+            check.style.display = "none";
+        }, 350);
     })
 });
 
