@@ -52,6 +52,7 @@ const joinGameBtn = document.getElementById('joinGameButton');
 const gameCodeInput = document.getElementById('gameCodeInput');
 const gameCodeDisplay = document.getElementById('gameCodeDisplay');
 const exitButton = document.getElementById('exitButton');
+const exitButton2 = document.getElementById('exitButton2');
 const instructionsButton = document.getElementById('instructionsButton');
 const yourGameCodeString = document.getElementById('header2');
 const instructionsDiv = document.getElementById('instructionsDiv');
@@ -65,6 +66,7 @@ const colors = document.querySelectorAll('.color');
 newGameBtn.addEventListener('click', newGame);
 joinGameBtn.addEventListener('click', joinGame);
 exitButton.addEventListener('click', exit);
+exitButton2.addEventListener('click', exit2);
 instructionsButton.addEventListener('click', instructions);
 customizeButton.addEventListener('click', customize);
 colors.forEach(color =>{
@@ -99,9 +101,16 @@ function joinGame() {
 }
 
 function exit() {
-    /*initialScreen.style.display = "block";
+    initialScreen.style.display = "block";
     gameScreen.style.display = "none";
-    exitButton.style.display = "none";*/
+    exitButton.style.display = "none";
+    instructionsButton.style.display = "block";
+    customizeButton.style.display = "block";
+    customizeDiv.style.display = "none";
+    instructionsDiv.style.display = "none";
+}
+
+function exit2(){
     window.location.reload();
 }
 
@@ -122,7 +131,7 @@ function customize() {
 }
 
 function init() {
-    exitButton.style.display = "block";
+    exitButton2.style.display = "block";
     initialScreen.style.display = "none";
     gameScreen.style.display = "block";
     instructionsButton.style.display = "none";
