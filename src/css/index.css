@@ -312,12 +312,12 @@ html {
 }
 
 .color{
-    width: 180px;
-    height: 180px;
+    width: 150px;
+    height: 150px;
     display: flex;
     border-radius: 100%;
     align-self: center;
-    border: none;
+    border: 5px solid #000;
 }
 
 .color:nth-of-type(1){

@@ -21,7 +21,6 @@ let canPlayer2Move = true;
 let playerExhaust = false;
 let playAnimation = false;
 
-
 module.exports = {
     gameLoop,
     getUpdatedVelocity,
@@ -151,7 +150,7 @@ function player2TakingDamage(result) {
 function createGameState() {
 
     return {
-        players: [{
+        players:[{
             id: 0,
             hp: 100,
             mana: 200,
@@ -167,6 +166,7 @@ function createGameState() {
             },
             radius: 30,
             img: './images/player.png',
+            color:0,
         }, {
             id: 1,
             hp: 100,
@@ -183,6 +183,7 @@ function createGameState() {
             },
             radius: 30,
             img: './images/player2.png',
+            color:0,
         }
         ],
         healingPotion: {},
@@ -426,25 +427,42 @@ function getUpdatedVelocity(keyCode, state) {
 /*
  * This func informs server that players should have changed images when heading to other direction that image is made for
  */
-function imageFlip(keyCode, state) {
+function imageFlip(keyCode, state, players, color) {
+    players[state].color = color;
     if (keyCode === 65 || keyCode === 37) {
-        if (state === 0) {
+        if (state === 0 && players[0].color === 0) {
             player1FaceLeft = true;
             return './images/player.png';
         }
-        if (state === 1) {
+        if (state === 1 && players[1].color === 0) {
             player2FaceLeft = true;
             return './images/player2.png';
         }
+        if (state === 0  && color !== 0) {
+            player1FaceLeft = true;
+            return `./images/playersColor${color}.png`;
+        }
+        if (state === 1 && color !== 0) {
+            player2FaceLeft = true;
+            return `./images/playersColor${color}.png`;
+        }
     }
     if (keyCode === 68 || keyCode === 39) {
-        if (state === 0) {
+        if (state === 0 && players[0].color === 0) {
             player1FaceLeft = false;
             return './images/playerF.png';
         }
-        if (state === 1) {
+        if (state === 1 && players[1].color === 0) {
             player2FaceLeft = false;
             return './images/player2F.png';
+        }
+        if (state === 0 && color !== 0) {
+            player1FaceLeft = false;
+            return `./images/playersColor${color}F.png`;
+        }
+        if (state === 1 && color !== 0) {
+            player2FaceLeft = false;
+            return `./images/playersColor${color}F.png`;
         }
     }
 }

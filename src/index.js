@@ -22,6 +22,8 @@ let playerImg = new Image();
 let playerImg2 = new Image();
 let skill1Used = false;
 let increment = 0;
+let playerColor;
+let playerNumber;
 
 const exhaust = 1000;
 
@@ -43,6 +45,7 @@ socket.on('tooManyPlayers', handleTooManyPlayers);
 socket.on('skill1', drawSkill1);
 socket.on('skill2', drawSkill2);
 socket.on('minusHp', minusHP);
+socket.on('playersColors', playersColors);
 
 /* Important query selectors */
 const gameScreen = document.getElementById('mainSection');
@@ -71,7 +74,8 @@ instructionsButton.addEventListener('click', instructions);
 customizeButton.addEventListener('click', customize);
 colors.forEach(color =>{
     color.addEventListener('click', function(){
-        const playerColor = color.id;
+        playerColor = color.id;
+        playersColors();
         check.style.display = "block";
         setTimeout(() => {
             check.style.display = "none";
@@ -79,13 +83,8 @@ colors.forEach(color =>{
     })
 });
 
-console.log(window.screen.availHeight);
-console.log(window.screen.availWidth);
-
-
 let ctx;
 let canvas;
-let playerNumber;
 let gameActive = false;
 
 
@@ -111,7 +110,19 @@ function exit() {
 }
 
 function exit2(){
-    window.location.reload();
+    window.location.reload(true);
+}
+
+function playersColors(){
+    let color;
+    if (playerColor !== undefined){
+    color = playerColor;
+    console.log(color, playerNumber);
+    socket.emit('playersColors', color, playerNumber);
+    } else if (playerColor === undefined || playerColor === null){
+        color = 0;
+        socket.emit('playersColors', color);
+    }
 }
 
 function instructions() {
@@ -137,6 +148,7 @@ function init() {
     instructionsButton.style.display = "none";
     yourGameCodeString.style.display = "block";
     border.style.display = "block";
+    customizeButton.style.display = "none";
 
     canvas = document.getElementById('mainSection');
     ctx = canvas.getContext('2d');
@@ -188,7 +200,6 @@ function keyup(e) {
 
 function paintGame(state) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     //
     //* Showing up players radius to see if hitboxes are fine
     //
