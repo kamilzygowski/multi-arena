@@ -342,7 +342,7 @@ function minusHP(state, value) {
             ctx.fillText('-' + value, state.x - 30, state.y - 25 - increment);
         }
         //}, 1 / 3600);
-    }, 1000 / 120); // This change determine if on "normal" server minusHp func should e better visible
+    }, 1000 / 240); // This change determine if on "normal" server minusHp func should e better visible
     setTimeout(() => {
         clearInterval(displayDamage);
         increment = 0;
