@@ -1,3 +1,4 @@
+
 const canvasBackground = "url('https://i.postimg.cc/L6RSJG8f/background.png')";
 
 const skill2 = new Image();
@@ -22,8 +23,9 @@ let playerImg = new Image();
 let playerImg2 = new Image();
 let skill1Used = false;
 let increment = 0;
-let playerColor;
+let playerColor = 0;
 let playerNumber;
+let playerId = makeid(4);
 
 const exhaust = 1000;
 
@@ -87,6 +89,8 @@ let ctx;
 let canvas;
 let gameActive = false;
 
+console.log(playerId);
+
 
 function newGame() {
     socket.emit('newGame');
@@ -110,18 +114,20 @@ function exit() {
 }
 
 function exit2(){
-    window.location.reload(true);
+    window.location.reload();
 }
 
 function playersColors(){
     let color;
+    let number;
+    number = playerId;
     if (playerColor !== undefined){
     color = playerColor;
-    console.log(color, playerNumber);
-    socket.emit('playersColors', color, playerNumber);
+    console.log(color, number);
+    socket.emit('playersColors', color, number);
     } else if (playerColor === undefined || playerColor === null){
         color = 0;
-        socket.emit('playersColors', color);
+        socket.emit('playersColors', color, number);
     }
 }
 
@@ -139,6 +145,16 @@ function customize() {
     instructionsButton.style.display = "none";
     customizeButton.style.display = "none";
     customizeDiv.style.display = "block";
+}
+
+function makeid(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUWVXYZabcdefghijklmnopqrstuwvxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i =0; i<length; i++){
+        result += characters.charAt(Math.floor(Math.random()* charactersLength));
+    }
+    return result;
 }
 
 function init() {

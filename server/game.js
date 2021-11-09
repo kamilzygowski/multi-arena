@@ -165,7 +165,7 @@ function createGameState() {
                 y: 0
             },
             radius: 30,
-            img: './images/player.png',
+            img: './images/playersColorFundefined.png',
             color:0,
         }, {
             id: 1,
@@ -182,7 +182,7 @@ function createGameState() {
                 y: 0
             },
             radius: 30,
-            img: './images/player2.png',
+            img: './images/playersColor2undefined.png',
             color:0,
         }
         ],
@@ -427,16 +427,16 @@ function getUpdatedVelocity(keyCode, state) {
 /*
  * This func informs server that players should have changed images when heading to other direction that image is made for
  */
-function imageFlip(keyCode, state, players, color) {
-    players[state].color = color;
-    if (keyCode === 65 || keyCode === 37) {
+function imageFlip(keyCode, state, players, color, playerId) {
+    //players[state].color = color;
+    if (keyCode === 65 || keyCode === 37 && color === undefined) {
         if (state === 0 && players[0].color === 0) {
             player1FaceLeft = true;
-            return './images/player.png';
+            return `./images/playersColor${color}.png`;
         }
-        if (state === 1 && players[1].color === 0) {
+        if (state === 1 && players[1].color === 0 && color === undefined) {
             player2FaceLeft = true;
-            return './images/player2.png';
+            return `./images/playersColor2${color}.png`;
         }
         if (state === 0  && color !== 0) {
             player1FaceLeft = true;
@@ -448,13 +448,13 @@ function imageFlip(keyCode, state, players, color) {
         }
     }
     if (keyCode === 68 || keyCode === 39) {
-        if (state === 0 && players[0].color === 0) {
+        if (state === 0 && players[0].color === 0 && color === undefined) {
             player1FaceLeft = false;
-            return './images/playerF.png';
+            return `./images/playersColorF${color}.png`;
         }
-        if (state === 1 && players[1].color === 0) {
+        if (state === 1 && players[1].color === 0 && color === undefined) {
             player2FaceLeft = false;
-            return './images/player2F.png';
+            return `./images/playersColor2F${color}.png`;
         }
         if (state === 0 && color !== 0) {
             player1FaceLeft = false;
@@ -466,6 +466,7 @@ function imageFlip(keyCode, state, players, color) {
         }
     }
 }
+
 
 /*
  * Gives server informations about skill if it's keyCode is pressed

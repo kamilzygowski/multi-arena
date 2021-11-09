@@ -12,6 +12,7 @@ const state = {};
 const clientRooms = {};
 
 let playerColor;
+let playerId;
 
 
 io.on('connection', client => {
@@ -67,9 +68,9 @@ io.on('connection', client => {
         client.emit('init', 1);
     }
 
-    function handlePlayersColors(color){
+    function handlePlayersColors(color, playerNumber){
         playerColor = color;
-        //players[1].color = playerColor;
+        playerId = playerNumber;
     }
 
     function handleKeydown(keyCode) {
@@ -130,7 +131,7 @@ io.on('connection', client => {
             }, 10);
         }
 
-        const img = imageFlip(keyCode, client.number - 1, state[roomName].players, playerColor);
+        const img = imageFlip(keyCode, client.number - 1, state[roomName].players, playerColor, playerId);
 
         if (img && (client.number - 1 === 0)) {
             state[roomName].players[client.number - 1].img = img;
