@@ -1,5 +1,5 @@
 
-const canvasBackground = "url('https://i.postimg.cc/L6RSJG8f/background.png')";
+let canvasBackground = "url('https://i.postimg.cc/L6RSJG8f/background.png')";
 
 const skill2 = new Image();
 skill2.src = './images/skill2Anim.png';
@@ -66,6 +66,7 @@ const customizeButton = document.getElementById('customizeButton');
 const customizeDiv = document.getElementById('customizeDiv');
 const check = document.getElementById('check');
 const colors = document.querySelectorAll('.color');
+const battleground = document.querySelectorAll('.battleGround');
 
 
 newGameBtn.addEventListener('click', newGame);
@@ -78,18 +79,22 @@ colors.forEach(color =>{
     color.addEventListener('click', function(){
         playerColor = color.id;
         playersColors();
-        check.style.display = "block";
-        setTimeout(() => {
-            check.style.display = "none";
-        }, 350);
-    })
+        apply();
+    });
 });
+battleground.forEach(background => {
+    background.addEventListener('click', function(){
+        canvasBackground = "url('"+background.value+"')";
+        apply();
+    });
+});
+
 
 let ctx;
 let canvas;
 let gameActive = false;
 
-console.log(playerId);
+//console.log(playerId);
 
 
 function newGame() {
@@ -117,13 +122,20 @@ function exit2(){
     window.location.reload();
 }
 
+function apply(){
+    check.style.display = "block";
+        setTimeout(() => {
+            check.style.display = "none";
+        }, 350);
+}
+
 function playersColors(){
     let color;
     let number;
     number = playerId;
     if (playerColor !== undefined){
     color = playerColor;
-    console.log(color, number);
+    console.log(payload, payload.color);
     socket.emit('playersColors', color, number);
     } else if (playerColor === undefined || playerColor === null){
         color = 0;
@@ -176,8 +188,6 @@ function init() {
         canvas.width = 1220;
         canvas.height = 610;
     }
-
-    console.log(canvas.width, canvas.height);
 
     document.addEventListener('keydown', keydown);
     document.addEventListener('keyup', keyup);

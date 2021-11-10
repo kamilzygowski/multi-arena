@@ -429,7 +429,7 @@ function getUpdatedVelocity(keyCode, state) {
  */
 function imageFlip(keyCode, state, players, color, playerId) {
     //players[state].color = color;
-    if (keyCode === 65 || keyCode === 37 && color === undefined) {
+    if (keyCode === 65 || keyCode === 37) {
         if (state === 0 && players[0].color === 0) {
             player1FaceLeft = true;
             return `./images/playersColor${color}.png`;
